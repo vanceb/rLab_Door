@@ -1,0 +1,4 @@
+(sym_lib_table
+  (lib (name "MP1584_Buck_Converter")(type "KiCad")(uri "${KIPRJMOD}/MP1584_Buck_Converter.kicad_sym")(options "")(descr ""))
+  (lib (name "Power")(type "KiCad")(uri "${KIPRJMOD}/Power.kicad_sym")(options "")(descr ""))
+)
