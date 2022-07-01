@@ -1,0 +1,44 @@
+Comment,Designator,Footprint,LCSC
+10u,"C1,C2",Capacitor_Tantalum_SMD:CP_EIA-3216-18_Kemet-A,C7171
+10u,C3,Capacitor_SMD:C_1206_3216Metric,C13585
+100n,C4,Capacitor_SMD:C_0603_1608Metric,C14663
+1u,C5,Capacitor_SMD:C_0603_1608Metric,C15849
+SS210,"D1,D2,D3",Diode_SMD:D_SMA,C14996
+RED,"D4,D5,D8,D9",LED_SMD:LED_0603_1608Metric,C2286
+WHITE,"D6,D7",LED_SMD:LED_0603_1608Metric,C2290
+2A,F1,Fuse:Fuseholder_Cylinder-5x20mm_Schurter_0031_8201_Horizontal_Open,
+3A,"F2,F3,F4",Fuse:Fuseholder_Cylinder-5x20mm_Schurter_0031_8201_Horizontal_Open,
+ACT_1,J1,"TerminalBlock_Phoenix:TerminalBlock_Phoenix_MPT-0,5-3-2.54_1x03_P2.54mm_Horizontal",
+ACT_2,J2,"TerminalBlock_Phoenix:TerminalBlock_Phoenix_MPT-0,5-3-2.54_1x03_P2.54mm_Horizontal",
+NPX_1,J3,"TerminalBlock_Phoenix:TerminalBlock_Phoenix_MPT-0,5-3-2.54_1x03_P2.54mm_Horizontal",
+NPX_2,J4,"TerminalBlock_Phoenix:TerminalBlock_Phoenix_MPT-0,5-3-2.54_1x03_P2.54mm_Horizontal",
+WIEGAND KEYPAD,J5,"TerminalBlock_Phoenix:TerminalBlock_Phoenix_MPT-0,5-4-2.54_1x04_P2.54mm_Horizontal",
+NFC SERIAL,J6,"TerminalBlock_Phoenix:TerminalBlock_Phoenix_MPT-0,5-4-2.54_1x04_P2.54mm_Horizontal",
+I2C DISPLAY,J7,"TerminalBlock_Phoenix:TerminalBlock_Phoenix_MPT-0,5-4-2.54_1x04_P2.54mm_Horizontal",
+TAMPER,J8,"TerminalBlock_Phoenix:TerminalBlock_Phoenix_MPT-0,5-2-2.54_1x02_P2.54mm_Horizontal",
+V_IN,J9,"TerminalBlock_Phoenix:TerminalBlock_Phoenix_MPT-0,5-2-2.54_1x02_P2.54mm_Horizontal",
+BATTERY,J10,"TerminalBlock_Phoenix:TerminalBlock_Phoenix_MPT-0,5-2-2.54_1x02_P2.54mm_Horizontal",
+PROG,J11,Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical,
+PI,J12,Connector_IDC:IDC-Header_2x04_P2.54mm_Vertical,
+TEST POINTS,J13,Connector_PinHeader_2.54mm:PinHeader_1x08_P2.54mm_Vertical,
+2N7002,"Q1,Q2,Q5,Q6,Q8,Q9,Q11,Q12",Package_TO_SOT_SMD:SOT-23,C8545
+AO3401A,"Q3,Q7",Package_TO_SOT_SMD:SOT-23,C15127
+MMBT5551L,"Q4,Q10",Package_TO_SOT_SMD:SOT-23,C2145
+10k,"R1,R4,R5,R6,R13,R14,R17,R19,R20,R21,R22,R23,R25,R26,R27,R28,R29,R30,R31,R32,R33,R34,R36,R37,R38,R39,R40",Resistor_SMD:R_0603_1608Metric,C25804
+0.2,R2,Resistor_SMD:R_2512_6332Metric_Pad1.40x3.35mm_HandSolder,
+220,R3,Resistor_SMD:R_0603_1608Metric,C22962
+750,R7,Resistor_SMD:R_0603_1608Metric,C23241
+4k7,"R8,R15,R24,R35",Resistor_SMD:R_0603_1608Metric,C23162
+1k1,R9,Resistor_SMD:R_0603_1608Metric,C22764
+2k4,"R10,R11,R12",Resistor_SMD:R_0603_1608Metric,C22940
+620,R16,Resistor_SMD:R_0603_1608Metric,C23220
+330,R18,Resistor_SMD:R_0603_1608Metric,C23138
+3k,RV1,Potentiometer_THT:Potentiometer_Bourns_3296W_Vertical,
+RESET,SW1,Button_Switch_SMD:SW_Push_1P1T_NO_CK_KSC7xxJ,C318884
+BOOT,SW2,Button_Switch_SMD:SW_Push_1P1T_NO_CK_KSC7xxJ,C318884
+TEST_1,SW3,Button_Switch_SMD:SW_Push_1P1T_NO_CK_KSC7xxJ,C318884
+TEST_2,SW4,Button_Switch_SMD:SW_Push_1P1T_NO_CK_KSC7xxJ,C318884
+MP1584,U1,MP1584:MP1584,
+LM317_TO-252,U2,Package_TO_SOT_SMD:TO-252-2,C75510
+AMS1117-3.3,U3,Package_TO_SOT_SMD:SOT-223-3_TabPin2,C6186
+ESP32-WROOM-32D,U4,RF_Module:ESP32-WROOM-32,C473012
