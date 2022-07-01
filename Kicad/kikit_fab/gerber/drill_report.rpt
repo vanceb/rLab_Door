@@ -1,5 +1,5 @@
 Drill report for rLab_Door.kicad_pcb
-Created on Thu Jun 30 16:49:10 2022
+Created on Fri Jul  1 17:35:29 2022
 
 Copper Layer Stackup:
     =============================================================
@@ -30,5 +30,6 @@ Not plated through holes are merged with plated holes
     =============================================================
     T10  1.100mm  0.0433"  (18 holes)
     T11  2.700mm  0.1063"  (4 holes)
+    T12  3.200mm  0.1260"  (4 holes)
 
-    Total unplated holes count 22
+    Total unplated holes count 26
