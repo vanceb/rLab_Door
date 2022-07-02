@@ -46,7 +46,7 @@
     )
     (symbol "V_BATT_1_1"
       (pin power_in line (at 0 0 90) (length 0) hide
-        (name "+BATT" (effects (font (size 1.27 1.27))))
+        (name "V_BATT" (effects (font (size 1.27 1.27))))
         (number "1" (effects (font (size 1.27 1.27))))
       )
     )
