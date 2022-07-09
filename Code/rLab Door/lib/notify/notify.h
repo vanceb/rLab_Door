@@ -31,10 +31,16 @@ class Notify_Target
 {
 protected:
     uint8_t level;
+    bool muted;
+    virtual void send(uint8_t level, char *msg) = 0; // Must be overridden
 public:
     Notify_Target(uint8_t level);
     int set_level(uint8_t level);
-    virtual void notify(uint8_t level, char *msg) = 0; // Must be overridden
+    void mute(bool mute);
+    void mute();
+    void unmute();
+    bool ismuted();
+    void notify(uint8_t level, char *msg);
 };
 
 /* Concrete class to send messages to the console */
@@ -44,7 +50,7 @@ private:
     HardwareSerial * serial;
 public:
     Notify_Console(uint8_t level, HardwareSerial * serial);
-    void notify(uint8_t level, char *msg);
+    void send(uint8_t level, char *msg);
 };
 
 /* Concrete class to send messages to the logs */
@@ -53,7 +59,7 @@ class Notify_Log : public Notify_Target
 private:
 public:
     Notify_Log(uint8_t level);
-    void notify(uint8_t level, char *msg);
+    void send(uint8_t level, char *msg);
 };
 
 class Notify

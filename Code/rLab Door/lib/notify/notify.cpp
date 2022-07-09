@@ -62,6 +62,7 @@ void Notify::verbose(const char * fmt, ...) {
 
 Notify_Target::Notify_Target(uint8_t level) {
     set_level(level);
+    muted = false;
 }
 
 int Notify_Target::set_level(uint8_t level) {
@@ -69,14 +70,37 @@ int Notify_Target::set_level(uint8_t level) {
     return this->level;
 }
 
+void Notify_Target::mute(bool mute) {
+    this->muted = mute;
+}
+
+void Notify_Target::mute() {
+    this->muted = true;
+}
+
+void Notify_Target::unmute() {
+    this->muted = false;
+}
+
+void Notify_Target::notify(uint8_t level, char *msg) {
+    if (!muted) {
+        send(level, msg);
+    }
+}
+
+bool Notify_Target::ismuted() {
+    return this->muted;
+}
+
 Notify_Console::Notify_Console(uint8_t level, HardwareSerial * serial) 
 : Notify_Target(level) {
     this->serial = serial;
 }
 
-void Notify_Console::notify(uint8_t level, char * msg) {
+void Notify_Console::send(uint8_t level, char * msg) {
     if (level <= this->level) {
         serial->print(msg);
+        serial->print("\n");
     }
 }
 
@@ -84,7 +108,11 @@ Notify_Log::Notify_Log(uint8_t level) : Notify_Target(level) {
 
 }
 
-void Notify_Log::notify(uint8_t level, char * msg) {
+/* Send notify messages to the esp-idf (Arduino) log 
+ *
+ * Usually this goes to Serial
+ */
+void Notify_Log::send(uint8_t level, char * msg) {
     if (level <= this->level) {
         switch (level)
         {

@@ -47,12 +47,22 @@
 #define DISP_ROWS           4
 #define DISP_COLS           20
 
+/* Max variable string lengths */
+/* Wifi */
+#define WIFI_SSID_MAX_LEN   16
+#define WIFI_PASSWD_MAX_LEN 32
+/* Pushover (https://pushover.net) */
+#define PO_USER_KEY_MAX_LEN 32
+#define PO_API_KEY_MAX_LEN  32
 
-/* Config in EEPROM (Flash) */
-/* Locations */
-#define ENABLED             0
+/* Preferences stored (Flash) */
+#define PREFS_NS            "rlabDoor"
 
-/* Bits */
+#define PREFS_WIFI_SSID_KEY "wifi_ssid"
+#define PREFS_WIFI_PWD_KEY  "wifi_passwd"
+#define PREFS_HARDWARE_KEY  "hw_enabled"
+
+/* Hardware Enabled Bits */
 #define ENABLED_PI          0x01    // Monitor and accept commands from the Pi
 #define ENABLED_DISP        0x02    // Send messages to character display
 #define ENABLED_NPX_1       0x04    // Drive neopixel string 1

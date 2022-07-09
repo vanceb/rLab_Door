@@ -14,7 +14,7 @@ extern char rxbuf[BUF_SIZE];
 extern char cmd[BUF_SIZE + 1];
 
 /* Console Commands */
-#define MAX_TOKEN_LEN (16)  // longest token length
+#define MAX_TOKEN_LEN (64)  // longest token length
 #define MAX_TOKENS (4)      // Maximum number of tokens to be parsed
 #define MAX_MSG_LEN (256)    // The maximum response size
 #define WHITESPACE "\t \r\n"

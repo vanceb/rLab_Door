@@ -1,7 +1,9 @@
-#include "console_ui.h"
-
 #include <WiFi.h>
-#include <ArduinoNvs.h>
+#include <Preferences.h>
+
+#include <console_ui.h>
+#include <config.h>
+#include <notify.h>
 
 char rxbuf[BUF_SIZE];
 char cmd[BUF_SIZE + 1];
@@ -39,11 +41,24 @@ void consoleTask(void *pvParameters)
 
 /* The help command */
 char *help(char args[MAX_TOKENS][MAX_TOKEN_LEN]) {
-    snprintf(msg, MAX_MSG_LEN, \
-    "\nValid commands:\n"
-    "\thelp - display this help message\n"
-    "\techo - echo back the rest of the arguments\n"
-    );
+    if (strlen(args[1]) == 0) {
+        snprintf(msg, MAX_MSG_LEN, \
+        "\nValid commands:\n"
+        "\thelp - display this help message\n"
+        "\techo - echo back the rest of the arguments\n"
+        "\twifi - setup wifi, or get status\n"
+        );
+    } else {
+        if (strcmp(args[1], "wifi") == 0) {
+            snprintf(msg, MAX_MSG_LEN, \
+            "\nwifi <ssid> <password>\n"
+            "\tConfigures the wifi to connect to the given ssid using the password\n"
+            "\tThe ssid and password will be stored across reboots\n"
+            "\nwifi status\n"
+            "\tPrints the network status\n"
+            );
+        }
+    }
     return(msg);
 }
 
@@ -66,11 +81,23 @@ char * wifi(char args[MAX_TOKENS][MAX_TOKEN_LEN]) {
         strcat(msg, "SSID or password are empty!");
     } else {
         /* Try to connect with provided credentials */
-
-        /* Store SSID and password */
-        NVS.setString("wifi_ssid", args[1]);
-        NVS.setString("wifi_passwd", args[2]);
-        
+        WiFi.begin(args[1], args[2]);
+        int seconds = 10;
+        while (seconds > 0 && WiFi.status() != WL_CONNECTED) {
+            seconds--;
+            delay(1000);
+        } 
+        if (WiFi.status() == WL_CONNECTED) {
+            /* Store SSID and password */
+            Preferences prefs;
+            prefs.begin(PREFS_NS);
+            prefs.putString(PREFS_WIFI_SSID_KEY, args[1]);
+            prefs.putString(PREFS_WIFI_PWD_KEY,  args[2]);
+            prefs.end();
+            strcat(msg, "Connected to wifi!\nCredentials saved.");
+        } else {
+            strcat(msg, "Didn't connect to wifi!\nCredentials not saved.");
+        }
         strcat(msg, "\n");
     }
     return (msg);
