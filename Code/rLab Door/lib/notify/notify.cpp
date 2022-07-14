@@ -108,6 +108,7 @@ Notify_Log::Notify_Log(uint8_t level) : Notify_Target(level) {
 
 }
 
+
 /* Send notify messages to the esp-idf (Arduino) log 
  *
  * Usually this goes to Serial

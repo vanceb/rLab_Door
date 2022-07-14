@@ -20,7 +20,7 @@ HardwareSerial NFC_Serial(2);
 UBaseType_t console_hwm;
 UBaseType_t prev_console_hwm = 0;
 
-void setup() {
+void setup () {
   /* Configure UARTs */
   Serial.begin    (115200, SERIAL_8N1, GPIO_RXDI_PROG, GPIO_TXDO_PROG);
   Pi_Serial.begin (115200, SERIAL_8N1, GPIO_RXDI_PI, GPIO_TXDO_PI);

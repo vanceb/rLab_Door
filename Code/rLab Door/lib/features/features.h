@@ -2,6 +2,7 @@
 #define FEATURES_H
 
 #include <Arduino.h>
+//#include <pushover.h>
 
 /* GPIO config */
 
@@ -53,9 +54,6 @@
 /* Wifi */
 #define WIFI_SSID_MAX_LEN   16
 #define WIFI_PASSWD_MAX_LEN 32
-/* Pushover (https://pushover.net) */
-#define PO_USER_KEY_MAX_LEN 32
-#define PO_API_KEY_MAX_LEN  32
 
 /* Preferences stored (Flash) */
 #define PREFS_NS            "rlabDoor"
@@ -73,6 +71,7 @@
 #define FEATURE_KEYPAD      0x20    // Accept input from the keypad
 #define FEATURE_NFC         0x40    // Accept input from the NFC reader
 #define FEATURE_WIFI        0x80    // Allow WiFi connectivity
+#define FEATURE_PUSHOVER    0x10    // Allow notify to pushover (Needs wifi)
 
 /* Character buffer for messages */
 #define MAX_MSG_LEN         512
@@ -89,6 +88,7 @@ extern uint32_t status;
 extern char wifi_ssid  [WIFI_SSID_MAX_LEN];
 extern char wifi_passwd[WIFI_PASSWD_MAX_LEN];
 
+//extern Pushover * pushover;
 
 /* Functions */
 void load_prefs();

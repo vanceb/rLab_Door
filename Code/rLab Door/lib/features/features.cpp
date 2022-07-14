@@ -12,16 +12,7 @@ char msg[MAX_MSG_LEN];
 
 char wifi_ssid[WIFI_SSID_MAX_LEN] = {0};
 char wifi_passwd[WIFI_PASSWD_MAX_LEN] = {0};
-
-uint32_t set(uint32_t * bitfield, uint32_t feature) {
-    *bitfield |= feature;
-    return *bitfield;
-}
-
-uint32_t clear(uint32_t * bitfield, uint32_t feature) {
-    *bitfield &= !feature;
-    return *bitfield;
-}
+//Pushover * pushover = new Pushover();
 
 void load_prefs()
 {
@@ -36,18 +27,29 @@ void load_prefs()
     }
     /* Read values from flash */
     enabled = prefs.getUInt(PREFS_HARDWARE_KEY);
+    /* Assume all configured, unless we find they are not
+     * Most don't need configuration so this ensures that 
+     * they report as configured
+     */
+    configured = 0xFFFFFFFF;
 
     /* Check whether enabled features are configured */
     /* Wifi */
-    if (prefs.isKey(PREFS_WIFI_SSID_KEY) && prefs.isKey(PREFS_WIFI_PWD_KEY))
-    {
-        configured |= FEATURE_WIFI;
+    if (prefs.isKey(PREFS_WIFI_SSID_KEY) && prefs.isKey(PREFS_WIFI_PWD_KEY)) {
         /* Get the stored ssid and passwd */
         prefs.getString(PREFS_WIFI_SSID_KEY, wifi_ssid, WIFI_SSID_MAX_LEN);
         prefs.getString(PREFS_WIFI_PWD_KEY, wifi_passwd, WIFI_PASSWD_MAX_LEN);
+        configured |= FEATURE_WIFI;
+    } else {
+        /* Not configured so clear the flag */
+        configured &= !FEATURE_WIFI;
     }
-
     prefs.end();
+
+    /* Check pushover */
+//    if (!pushover->configure()) {
+//        configured &= !FEATURE_PUSHOVER;
+//    }
 }
 
 char *show_features()
@@ -55,30 +57,39 @@ char *show_features()
     /* List enabled features */
     memset(msg, 0, MAX_MSG_LEN); // Clear the response message
     snprintf(msg, MAX_MSG_LEN, \
-        "Wifi:               %s, %s\n"
-        "Pi:                 %s\n"
-        "Character display:  %s\n"
-        "Neopixel 1:         %s\n"
-        "Neopixel 2:         %s\n"
-        "NFC reader:         %s, %s\n"
-        "Keypad:             %s\n"
-        "Open 2 output:      %s\n",
-        (enabled    & FEATURE_WIFI)    ? "enabled" : "disabled",
-        (configured & FEATURE_WIFI)    ? "configured" : "not configured",
-        (enabled    & FEATURE_PI)      ? "enabled" : "disabled",
-        (enabled    & FEATURE_DISP)    ? "enabled" : "disabled",
-        (enabled    & FEATURE_NPX_1)   ? "enabled" : "disabled",
-        (enabled    & FEATURE_NPX_2)   ? "enabled" : "disabled",
-        (enabled    & FEATURE_NFC)     ? "enabled" : "disabled",
-        (configured & FEATURE_NFC)     ? "configured" : "not configured",
-        (enabled    & FEATURE_KEYPAD)  ? "enabled" : "disabled",
-        (enabled    & FEATURE_OPEN_2)  ? "enabled" : "disabled"
+        "Wifi:              %s, %s\n"
+        "Pi:                %s, %s\n"
+        "Character display: %s, %s\n"
+        "Neopixel 1:        %s, %s\n"
+        "Neopixel 2:        %s, %s\n"
+        "NFC reader:        %s, %s\n"
+        "Keypad:            %s, %s\n"
+        "Open 2 output:     %s, %s\n"
+        "Pushover notify:   %s, %s\n",
+        (enabled    & FEATURE_WIFI)     ? "enabled" : "disabled",
+        (configured & FEATURE_WIFI)     ? "configured" : "not configured",
+        (enabled    & FEATURE_PI)       ? "enabled" : "disabled",
+        (configured & FEATURE_PI)       ? "configured" : "not configured",
+        (enabled    & FEATURE_DISP)     ? "enabled" : "disabled",
+        (configured & FEATURE_DISP)     ? "configured" : "not configured",
+        (enabled    & FEATURE_NPX_1)    ? "enabled" : "disabled",
+        (configured & FEATURE_NPX_1)    ? "configured" : "not configured",
+        (enabled    & FEATURE_NPX_2)    ? "enabled" : "disabled",
+        (configured & FEATURE_NPX_2)    ? "configured" : "not configured",
+        (enabled    & FEATURE_NFC)      ? "enabled" : "disabled",
+        (configured & FEATURE_NFC)      ? "configured" : "not configured",
+        (enabled    & FEATURE_KEYPAD)   ? "enabled" : "disabled",
+        (configured & FEATURE_KEYPAD)   ? "configured" : "not configured",
+        (enabled    & FEATURE_OPEN_2)   ? "enabled" : "disabled",
+        (configured & FEATURE_OPEN_2)   ? "configured" : "not configured",
+        (enabled    & FEATURE_PUSHOVER) ? "enabled" : "disabled",
+        (configured & FEATURE_PUSHOVER) ? "configured" : "not configured"
     );
     return msg;
 }
 
 int configure_wifi(char * ssid, char * passwd) {
-    set(&enabled, FEATURE_WIFI);
+    enabled |= FEATURE_WIFI;
     WiFi.begin(ssid, passwd);
     int seconds = 10;
     while (seconds > 0 && WiFi.status() != WL_CONNECTED) {
@@ -94,7 +105,6 @@ int configure_wifi(char * ssid, char * passwd) {
         prefs.end();
         /* reload preferences from flash */
         load_prefs();
-        set(&configured, FEATURE_WIFI);
         return 1;
     } else {
         return 0;
@@ -173,4 +183,5 @@ int setup_i2c_disp() {
             return false;
         }
     }
+    return false;
 }
