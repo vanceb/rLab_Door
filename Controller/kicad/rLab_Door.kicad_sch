@@ -1464,6 +1464,9 @@
     (path "/ec0c14be-39b0-417b-a7ff-cf55ea415099/3e87a734-e85f-4304-b6cf-93c9f0b9d847"
       (reference "#PWR074") (unit 1) (value "+5V") (footprint "")
     )
+    (path "/1d352201-903e-4f3c-bf30-61ee8c62c63d/d35e53b5-c0d6-4bd4-b775-63ad23bb0711"
+      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
+    )
     (path "/1d352201-903e-4f3c-bf30-61ee8c62c63d/23d2b6b5-abaf-485e-9830-f6e0f258640d"
       (reference "C1") (unit 1) (value "10u") (footprint "Capacitor_Tantalum_SMD:CP_EIA-3216-18_Kemet-A")
     )
@@ -1556,6 +1559,9 @@
     )
     (path "/6a228ecb-ca1d-47c4-87f2-7edb9cb956a9/2a7927f0-cfcf-40f5-aae6-47f89fbb0f6c"
       (reference "J13") (unit 1) (value "TEST POINTS") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x08_P2.54mm_Vertical")
+    )
+    (path "/1d352201-903e-4f3c-bf30-61ee8c62c63d/69d99786-ac38-484c-9455-21a27c5575f5"
+      (reference "J?") (unit 1) (value "Jack-DC") (footprint "")
     )
     (path "/ec0c14be-39b0-417b-a7ff-cf55ea415099/8b634c10-c980-4167-93f6-3380ee05816b"
       (reference "Q1") (unit 1) (value "2N7002") (footprint "Package_TO_SOT_SMD:SOT-23")
@@ -1712,6 +1718,12 @@
     )
     (path "/ec0c14be-39b0-417b-a7ff-cf55ea415099/cd682ba5-6423-4f74-a1e8-c60a4bb1fb20"
       (reference "R40") (unit 1) (value "10k") (footprint "Resistor_SMD:R_0603_1608Metric")
+    )
+    (path "/ec0c14be-39b0-417b-a7ff-cf55ea415099/e2e1f077-84af-488c-b5f0-4904fc161cda"
+      (reference "R?") (unit 1) (value "10k") (footprint "Resistor_SMD:R_0603_1608Metric")
+    )
+    (path "/ec0c14be-39b0-417b-a7ff-cf55ea415099/fb664086-17c0-4746-b52d-3f118a3bdc58"
+      (reference "R?") (unit 1) (value "10k") (footprint "Resistor_SMD:R_0603_1608Metric")
     )
     (path "/1d352201-903e-4f3c-bf30-61ee8c62c63d/18e18cda-0583-4fa5-b128-b3ee020899ae"
       (reference "RV1") (unit 1) (value "3k") (footprint "Potentiometer_THT:Potentiometer_Bourns_3296W_Vertical")
