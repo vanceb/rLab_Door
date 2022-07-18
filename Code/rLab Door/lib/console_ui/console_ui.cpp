@@ -106,7 +106,6 @@ void wifi(HardwareSerial *console, char args[MAX_TOKENS][MAX_TOKEN_LEN]) {
 }
 
 /* Pushover */
-/*
 void po_conf(HardwareSerial *console, char args[MAX_TOKENS][MAX_TOKEN_LEN]) {
     char * user_key = args[1];
     char * api_key  = args[2];
@@ -115,28 +114,25 @@ void po_conf(HardwareSerial *console, char args[MAX_TOKENS][MAX_TOKEN_LEN]) {
     if(strlen(user_key) == 0 || strlen(api_key) == 0) {
         console->print("You must provide both the user_key and the api_key to configure pushover");
     } else {
-        if (pushover->configure(user_key, api_key, api_url)) {
+        if (pushover.configure(user_key, api_key, api_url)) {
             console->print ("Pushover credentials saved");
         } else {
             console->print("Unable to save pushover credentials to flash!");
         }
     }
 }
-*/
-/*
 void po_send(HardwareSerial *console, char args[MAX_TOKENS][MAX_TOKEN_LEN]) {
     char * title = args[1];
     char * msg   = args[2];
     int priority = atoi(args[3]);
 
-    int code = pushover->send(title, msg, priority);
+    int code = pushover.send(title, msg, priority);
     if (code > 0) {
         console->println("Sent...");
     } else {
         console->printf("Error sending message (%d)", code);
     }
 }
-*/
 
 /* Console command handler */
 void cmdline(HardwareSerial *console, char *request) {
@@ -175,20 +171,16 @@ void cmdline(HardwareSerial *console, char *request) {
     }
 
     /* po_config command */
-    /*
-    if (strcmp(args[0], "po_config") == 0) {
+    if (strcmp(args[0], "po_conf") == 0) {
         po_conf(console, args);
         return;
     }
-    */
 
     /* po_send command */
-    /*
-    if (strcmp(args[0], "po_config") == 0) {
+    if (strcmp(args[0], "po_send") == 0) {
         po_send(console, args);
         return;
     }
-    */
 
     /* No recognised commands so show the help */
     help(console, args);
