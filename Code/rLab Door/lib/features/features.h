@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include <pushover.h>
+#include <Preferences.h>
 
 /* GPIO config */
 
@@ -89,6 +90,7 @@ extern char wifi_ssid  [WIFI_SSID_MAX_LEN];
 extern char wifi_passwd[WIFI_PASSWD_MAX_LEN];
 
 extern Pushover pushover;
+extern Preferences prefs;
 
 /* Functions */
 void load_prefs();

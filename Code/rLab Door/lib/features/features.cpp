@@ -16,7 +16,7 @@ char wifi_passwd[WIFI_PASSWD_MAX_LEN] = {0};
 
 void load_prefs()
 {
-    Preferences prefs;
+//  Preferences prefs;
 //    prefs.begin(PREFS_NS);
 
     /* Check for hardware features enabled config setting */

@@ -26,10 +26,10 @@ int Pushover::configure(char * user_key, char * api_key, char * url) {
 //    prefs.begin(PREFS_PO_NAMESPACE);
 
     /* Store supplied credentials into flash */
-    if (user_key != NULL && api_key != NULL) {
+    if (strlen(user_key) > 0 && strlen(api_key) > 0) {
         prefs.putString(PREFS_PO_USER_KEY, user_key);
         prefs.putString(PREFS_PO_API_KEY,  api_key);
-        if (url == NULL) {
+        if (strlen(url) > 0) {
             /* Use the default */
             prefs.putString(PREFS_PO_URL, PUSHOVER_DEFAULT_URL);
         } else {
