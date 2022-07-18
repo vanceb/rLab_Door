@@ -6,9 +6,12 @@
 #include <console_ui.h>
 #include <log_manager.h>
 #include <notify.h>
+#include <Preferences.h>
 
 /* Global variables */
 TaskHandle_t consoleTaskHandle = NULL;
+Pushover pushover;
+Preferences prefs;
 
 /* Additional Serial Ports 
  * See https://quadmeup.com/arduino-esp32-and-3-hardware-serial-ports/?utm_source=pocket_mylist
@@ -27,7 +30,9 @@ void setup () {
   NFC_Serial.begin(115200, SERIAL_8N1, GPIO_RXDI_NFC, GPIO_TXDO_NFC);
 
   /* Load preferences from flash */
+  prefs.begin(PREFS_NS);
   load_prefs();
+  //pushover.configure();
   Serial.println(show_features());
   
   /* Bring up wifi if enabled and configured 

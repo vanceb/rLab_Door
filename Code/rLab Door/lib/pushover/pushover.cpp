@@ -10,8 +10,7 @@ char po_api_url [PUSHOVER_URL_MAX_LEN] = {0};
 
 Pushover::Pushover()
 {
-    /* Try to configure from flash stored credentials */
-    configure();
+    configured = false;
 }
 
 Pushover::~Pushover()
@@ -19,12 +18,12 @@ Pushover::~Pushover()
 }
 
 int Pushover::configure(char * user_key, char * api_key, char * url) { 
-    memcpy(po_user_key, 0, PUSHOVER_USER_KEY_MAX_LEN);
-    memcpy(po_api_key,  0, PUSHOVER_API_KEY_MAX_LEN);
-    memcpy(po_api_url,  0, PUSHOVER_URL_MAX_LEN);
+    memset(po_user_key, 0, PUSHOVER_USER_KEY_MAX_LEN);
+    memset(po_api_key,  0, PUSHOVER_API_KEY_MAX_LEN);
+    memset(po_api_url,  0, PUSHOVER_URL_MAX_LEN);
     
     Preferences prefs;
-    prefs.begin(PREFS_PO_NAMESPACE);
+//    prefs.begin(PREFS_PO_NAMESPACE);
 
     /* Store supplied credentials into flash */
     if (user_key != NULL && api_key != NULL) {
@@ -48,7 +47,7 @@ int Pushover::configure(char * user_key, char * api_key, char * url) {
     } else {
         log_e("Unable to retreive pushover preferences from flash");
     }
-    prefs.end();
+//    prefs.end();
 
     /* Sanity check */
     if (strlen(po_user_key) != 0 &&

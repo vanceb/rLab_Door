@@ -17,7 +17,7 @@ char wifi_passwd[WIFI_PASSWD_MAX_LEN] = {0};
 void load_prefs()
 {
     Preferences prefs;
-    prefs.begin(PREFS_NS);
+//    prefs.begin(PREFS_NS);
 
     /* Check for hardware features enabled config setting */
     if (!prefs.isKey(PREFS_HARDWARE_KEY))
@@ -44,7 +44,7 @@ void load_prefs()
         /* Not configured so clear the flag */
         configured &= !FEATURE_WIFI;
     }
-    prefs.end();
+//    prefs.end();
 
     /* Check pushover */
 //    if (!pushover->configure()) {
