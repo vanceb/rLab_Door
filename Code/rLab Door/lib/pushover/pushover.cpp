@@ -1,4 +1,5 @@
 #include <pushover.h>
+#include <features.h>
 
 #include <Preferences.h>
 #include <WiFi.h>
@@ -22,8 +23,6 @@ int Pushover::configure(char * user_key, char * api_key, char * url) {
     memset(po_api_key,  0, PUSHOVER_API_KEY_MAX_LEN);
     memset(po_api_url,  0, PUSHOVER_URL_MAX_LEN);
     
-    Preferences prefs;
-//    prefs.begin(PREFS_PO_NAMESPACE);
 
     /* Store supplied credentials into flash */
     if (strlen(user_key) > 0 && strlen(api_key) > 0) {
@@ -36,6 +35,7 @@ int Pushover::configure(char * user_key, char * api_key, char * url) {
             /* Use the url provided */
             prefs.putString(PREFS_PO_URL, url);
         }
+        log_i("Saved pushover credentials");
     } 
     
     /* Try and grab the creds from flash */
@@ -47,7 +47,6 @@ int Pushover::configure(char * user_key, char * api_key, char * url) {
     } else {
         log_e("Unable to retreive pushover preferences from flash");
     }
-//    prefs.end();
 
     /* Sanity check */
     if (strlen(po_user_key) != 0 &&

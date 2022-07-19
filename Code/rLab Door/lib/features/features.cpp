@@ -12,13 +12,9 @@ char msg[MAX_MSG_LEN];
 
 char wifi_ssid[WIFI_SSID_MAX_LEN] = {0};
 char wifi_passwd[WIFI_PASSWD_MAX_LEN] = {0};
-//Pushover * pushover = new Pushover();
 
 void load_prefs()
 {
-//  Preferences prefs;
-//    prefs.begin(PREFS_NS);
-
     /* Check for hardware features enabled config setting */
     if (!prefs.isKey(PREFS_HARDWARE_KEY))
     {
@@ -44,12 +40,11 @@ void load_prefs()
         /* Not configured so clear the flag */
         configured &= !FEATURE_WIFI;
     }
-//    prefs.end();
 
     /* Check pushover */
-//    if (!pushover->configure()) {
-//        configured &= !FEATURE_PUSHOVER;
-//    }
+    if (!pushover.is_configured()) {
+        configured &= !FEATURE_PUSHOVER;
+    }
 }
 
 char *show_features()
@@ -98,11 +93,8 @@ int configure_wifi(char * ssid, char * passwd) {
     } 
     if (WiFi.status() == WL_CONNECTED) {
         /* Store SSID and password */
-        Preferences prefs;
-        prefs.begin(PREFS_NS);
         prefs.putString(PREFS_WIFI_SSID_KEY, ssid);
         prefs.putString(PREFS_WIFI_PWD_KEY,  passwd);
-        prefs.end();
         /* reload preferences from flash */
         load_prefs();
         return 1;
