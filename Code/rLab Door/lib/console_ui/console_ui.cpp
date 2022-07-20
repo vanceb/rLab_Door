@@ -45,21 +45,38 @@ void consoleTask(void *pvParameters)
 
 /* The help command */
 void help(HardwareSerial *console, char args[MAX_TOKENS][MAX_TOKEN_LEN]) {
-    if (strlen(args[1]) == 0) {
-        console->print("\nValid commands:\n");
-        console->print("\thelp - display this help message\n");
-        console->print("\topen - open the door\n");
-        console->print("\techo - echo back the rest of the arguments\n");
-        console->print("\twifi - setup wifi, or get status\n");
-    } else {
+    if (strlen(args[1]) > 0) {
         if (strcmp(args[1], "wifi") == 0) {
             console->print("\nwifi <ssid> <password>\n");
             console->print("\tConfigures the wifi to connect to the given ssid using the password\n");
             console->print("\tThe ssid and password will be stored across reboots\n");
             console->print("\nwifi status\n");
             console->print("\tPrints the network status\n");
+            return;
+        }
+        if (strcmp(args[1], "po_conf") == 0) {
+            console->print("\npo_conf <user token> <api token> [<api endpoint url>]\n");
+            console->print("\tConfigures Pushover to use the message API\n");
+            console->print("\tuser and api tokens should be retreived from http://pushover.net\n");
+            console->print("\tIf no API endpoint is given then the default will be used\n");
+            console->print("\tThe tokens and url will be stored across reboots\n");
+            return;
+        }
+        if (strcmp(args[1], "po_send") == 0) {
+            console->print("\npo_send <title> <message> <priority>\n");
+            console->print("\ttitle and message must not contain spaces\n");
+            console->print("\t-2 <= priority <= 2\n");
+            return;
         }
     }
+    /* Print the default help */
+    console->print("\nValid commands:\n");
+    console->print("\thelp      - display this help message\n");
+    console->print("\topen      - open the door\n");
+    console->print("\techo      - echo back the rest of the arguments\n");
+    console->print("\twifi      - setup wifi, or get status\n");
+    console->print("\tpo_conf   - setup Pushover messaging\n");
+    console->print("\tpo_send   - send test Pushover message\n");
 }
 
 /* The echo command */
@@ -122,15 +139,14 @@ void po_conf(HardwareSerial *console, char args[MAX_TOKENS][MAX_TOKEN_LEN]) {
     }
 }
 void po_send(HardwareSerial *console, char args[MAX_TOKENS][MAX_TOKEN_LEN]) {
-    char * title = args[1];
-    char * msg   = args[2];
-    char * priority = args[3];
-    /*
-    int priority = 1;
+    char * title    = args[1];
+    char * msg      = args[2];
+    int    priority = 0;
+    
     if (strlen(args[3]) > 0) {
         priority = atoi(args[3]);
     }
-    */
+    
 
     int code = pushover.send(title, msg, priority);
     if (code == 200) {

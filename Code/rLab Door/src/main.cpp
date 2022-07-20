@@ -60,6 +60,8 @@ void setup () {
   //esp_log_set_vprintf(&_log_vprintf);
   //esp_log_level_set("*", ESP_LOG_INFO);
 
+  pushover.send("rLab Door Booting", "The rLabDoor controller is booting up", -1);
+
   /* Start the FreeRTOS tasks */
   xTaskCreate(consoleTask, "Console Task", 10000, (void*) &Serial, 8, &consoleTaskHandle);
 }

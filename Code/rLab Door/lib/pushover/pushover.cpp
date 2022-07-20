@@ -18,7 +18,7 @@ Pushover::~Pushover()
 {
 }
 
-int Pushover::configure(char * user_key, char * api_key, char * url) { 
+int Pushover::configure(const char * user_key, const char * api_key, const char * url) { 
     memset(po_user_key, 0, PUSHOVER_USER_KEY_MAX_LEN);
     memset(po_api_key,  0, PUSHOVER_API_KEY_MAX_LEN);
     memset(po_api_url,  0, PUSHOVER_URL_MAX_LEN);
@@ -60,11 +60,16 @@ int Pushover::configure(char * user_key, char * api_key, char * url) {
     return configured;
 }
 
+int Pushover::configure() {
+    char empty[1] = { 0 }; 
+    return configure(empty, empty, empty);
+}
+
 bool Pushover::is_configured() {
     return configured;
 }
 
-int Pushover::send(char * title, char * msg, char * priority) {
+int Pushover::send(const char * title, const char * msg, int priority) {
     int timeout =  5;
     int httpCode = 0;
     if(configured) {
@@ -77,15 +82,15 @@ int Pushover::send(char * title, char * msg, char * priority) {
             return -2;
         } else {
             /* Send the message */
-            /*
-            char p[2];
-            if (priority < 0 || priority > 10) {
-                itoa(1, p, 10);
+            char p[3];
+            if (priority < -2 || priority > 2) {
+                log_w("Priority out of range (%d), must be -2 <= priority <= 2", priority);
+                itoa(0, p, 10);
             } else {
                 itoa(priority, p, 10);
             }
-            */
-            int max_msg_len = PUSHOVER_MAX_PAYLOAD_LEN - (92 + strlen(title));
+            
+            int max_msg_len = PUSHOVER_MAX_PAYLOAD_LEN - (93 + strlen(title));
             char payload[PUSHOVER_MAX_PAYLOAD_LEN];
             strcpy(payload, "token=");      // 6 bytes
             strcat(payload, po_api_key);    // 30 bytes
@@ -94,7 +99,7 @@ int Pushover::send(char * title, char * msg, char * priority) {
             strcat(payload, "&title=");     // 7 bytes
             strcat(payload, title);         // Unknown
             strcat(payload, "&priority=");  // 10 bytes
-            strcat(payload, priority);             // 1 byte
+            strcat(payload, p);             // 2 bytes
             strcat(payload, "&message=");
             strncat(payload, msg, max_msg_len);
 
