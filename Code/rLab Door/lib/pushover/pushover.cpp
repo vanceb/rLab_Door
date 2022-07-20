@@ -98,6 +98,8 @@ int Pushover::send(char * title, char * msg, char * priority) {
             strcat(payload, "&message=");
             strncat(payload, msg, max_msg_len);
 
+            log_d("%s", payload);
+
             HTTPClient https;
             https.begin(po_api_url, DIGICERT_ROOT_CA);
             https.addHeader("Content-Type", "application/x-www-form-urlencoded");

@@ -45,7 +45,6 @@ void load_prefs()
     if (!pushover.configure()) {
         configured &= ~(FEATURE_PUSHOVER);
     }
-    log_d("Pushover configured? %b", pushover.is_configured());
 }
 
 char *show_features()

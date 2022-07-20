@@ -5,7 +5,7 @@
 
 /* Pushover (https://pushover.net) */
 /* Pushover API url */
-#define PUSHOVER_DEFAULT_URL                 "https://api.pushover.net/1/message.json"
+#define PUSHOVER_DEFAULT_URL                 "https://api.pushover.net/1/messages.json"
 #define PUSHOVER_URL_MAX_LEN         64
 #define PUSHOVER_USER_KEY_MAX_LEN    32
 #define PUSHOVER_API_KEY_MAX_LEN     32

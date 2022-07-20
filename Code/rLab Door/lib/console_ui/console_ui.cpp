@@ -133,8 +133,8 @@ void po_send(HardwareSerial *console, char args[MAX_TOKENS][MAX_TOKEN_LEN]) {
     */
 
     int code = pushover.send(title, msg, priority);
-    if (code > 0) {
-        console->println("Sent...");
+    if (code == 200) {
+        console->println("Sent successfully...");
     } else {
         console->printf("Error sending message (%d)", code);
     }
