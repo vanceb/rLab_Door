@@ -61,7 +61,7 @@ void setup () {
   //esp_log_level_set("*", ESP_LOG_INFO);
 
   /* Start the FreeRTOS tasks */
-  xTaskCreate(consoleTask, "Console Task", 3000, (void*) &Serial, 8, &consoleTaskHandle);
+  xTaskCreate(consoleTask, "Console Task", 10000, (void*) &Serial, 8, &consoleTaskHandle);
 }
 
 void loop() {

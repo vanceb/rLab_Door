@@ -58,7 +58,7 @@ public:
     ~Pushover();
     int configure (char * user_key = "", char * api_key = "", char * url = "");
     bool is_configured();
-    int send(char * title, char * msg, int priority);
+    int send(char * title, char * msg, char * priority);
 };
 
 

@@ -38,13 +38,14 @@ void load_prefs()
         configured |= FEATURE_WIFI;
     } else {
         /* Not configured so clear the flag */
-        configured &= !FEATURE_WIFI;
+        configured &= ~(FEATURE_WIFI);
     }
 
     /* Check pushover */
-    if (!pushover.is_configured()) {
-        configured &= !FEATURE_PUSHOVER;
+    if (!pushover.configure()) {
+        configured &= ~(FEATURE_PUSHOVER);
     }
+    log_d("Pushover configured? %b", pushover.is_configured());
 }
 
 char *show_features()

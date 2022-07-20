@@ -124,7 +124,13 @@ void po_conf(HardwareSerial *console, char args[MAX_TOKENS][MAX_TOKEN_LEN]) {
 void po_send(HardwareSerial *console, char args[MAX_TOKENS][MAX_TOKEN_LEN]) {
     char * title = args[1];
     char * msg   = args[2];
-    int priority = atoi(args[3]);
+    char * priority = args[3];
+    /*
+    int priority = 1;
+    if (strlen(args[3]) > 0) {
+        priority = atoi(args[3]);
+    }
+    */
 
     int code = pushover.send(title, msg, priority);
     if (code > 0) {

@@ -29,11 +29,11 @@ int Pushover::configure(char * user_key, char * api_key, char * url) {
         prefs.putString(PREFS_PO_USER_KEY, user_key);
         prefs.putString(PREFS_PO_API_KEY,  api_key);
         if (strlen(url) > 0) {
-            /* Use the default */
-            prefs.putString(PREFS_PO_URL, PUSHOVER_DEFAULT_URL);
-        } else {
             /* Use the url provided */
             prefs.putString(PREFS_PO_URL, url);
+        } else {
+            /* Use the default */
+            prefs.putString(PREFS_PO_URL, PUSHOVER_DEFAULT_URL);
         }
         log_i("Saved pushover credentials");
     } 
@@ -48,10 +48,11 @@ int Pushover::configure(char * user_key, char * api_key, char * url) {
         log_e("Unable to retreive pushover preferences from flash");
     }
 
+    log_d("Pushover: %s %s %s", po_user_key, po_api_key, po_api_url);
     /* Sanity check */
-    if (strlen(po_user_key) != 0 &&
-        strlen(po_api_key)  != 0 &&
-        strlen(po_api_url)  != 0) {
+    if (strlen(po_user_key) > 0 &&
+        strlen(po_api_key)  > 0 &&
+        strlen(po_api_url)  > 0) {
             configured = true;
     } else {
         configured = false;
@@ -63,7 +64,7 @@ bool Pushover::is_configured() {
     return configured;
 }
 
-int Pushover::send(char * title, char * msg, int priority) {
+int Pushover::send(char * title, char * msg, char * priority) {
     int timeout =  5;
     int httpCode = 0;
     if(configured) {
@@ -76,22 +77,24 @@ int Pushover::send(char * title, char * msg, int priority) {
             return -2;
         } else {
             /* Send the message */
+            /*
             char p[2];
             if (priority < 0 || priority > 10) {
                 itoa(1, p, 10);
             } else {
                 itoa(priority, p, 10);
             }
+            */
             int max_msg_len = PUSHOVER_MAX_PAYLOAD_LEN - (92 + strlen(title));
             char payload[PUSHOVER_MAX_PAYLOAD_LEN];
-            strcat(payload, "token=");      // 6 bytes
+            strcpy(payload, "token=");      // 6 bytes
             strcat(payload, po_api_key);    // 30 bytes
             strcat(payload, "&user=");      // 6 bytes
             strcat(payload, po_user_key);   // 30 bytes
             strcat(payload, "&title=");     // 7 bytes
             strcat(payload, title);         // Unknown
             strcat(payload, "&priority=");  // 10 bytes
-            strcat(payload, p);             // 1 byte
+            strcat(payload, priority);             // 1 byte
             strcat(payload, "&message=");
             strncat(payload, msg, max_msg_len);
 
