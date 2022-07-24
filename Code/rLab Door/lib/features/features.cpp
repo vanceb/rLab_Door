@@ -1,8 +1,11 @@
 #include <Preferences.h>
 #include <WiFi.h>
 #include <Wire.h>
+#include <Adafruit_SSD1306.h>
 
 #include <features.h>
+#include <conf.h>
+
 
 uint32_t enabled;
 uint32_t configured = 0;
@@ -12,6 +15,9 @@ char msg[MAX_MSG_LEN];
 
 char wifi_ssid[WIFI_SSID_MAX_LEN] = {0};
 char wifi_passwd[WIFI_PASSWD_MAX_LEN] = {0};
+
+
+Adafruit_SSD1306 display;
 
 void load_prefs()
 {
@@ -112,7 +118,11 @@ void start_wifi()
         {
             /* Connect to wifi */
             log_d("Connecting to wifi: %s", wifi_ssid);
-            WiFi.begin(wifi_ssid, wifi_passwd);
+            if(!WiFi.begin(wifi_ssid, wifi_passwd)) {
+                log_e("Problem starting up wifi - maybe DNS?");
+            } else {
+
+            }
             /* Give it up to 10 seconds to join then continue */
             int seconds = 10;
             while (seconds > 0 && WiFi.status() != WL_CONNECTED)
@@ -169,10 +179,36 @@ int setup_i2c_disp() {
         Wire.beginTransmission(DISP_ADDR);
         if (Wire.endTransmission() == 0) {
             log_i("Character display found at i2c 0x%02X", DISP_ADDR);
+/*
+            if(display.begin(SSD1306_SWITCHCAPVCC, SSD_ADDR)) {
+                display.display(); // Adafruit welcome screen
+            } else {
+                log_e("Unable to initialise OLED display");
+                return false;
+            }
+*/
             return true;
         } else {
             log_w("Character display NOT found at i2c 0x%02X", DISP_ADDR);
-            return false;
+            log_i("Scanning...");
+            int error;
+            int found = 0;
+            for (int address = 1; address < 127; address++ )
+            {
+                // The i2c_scanner uses the return value of
+                // the Write.endTransmisstion to see if
+                // a device did acknowledge to the address.
+                Wire.beginTransmission(address);
+                error = Wire.endTransmission();
+
+                if (error == 0) {
+                    log_i("I2C device found at address 0x%02X", address);
+                    found++;
+                } else if (error == 4) {
+                    log_w("Unknown error at address 0x%02X", address);
+                }
+            }
+            log_i("Found %d devices on the I2C bus", found);
         }
     }
     return false;

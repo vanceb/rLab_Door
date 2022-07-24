@@ -2,9 +2,8 @@
 #include <Preferences.h>
 
 #include <console_ui.h>
+#include <conf.h>
 #include <features.h>
-#include <notify.h>
-//#include <pushover.h>
 
 char rxbuf[BUF_SIZE];
 char cmd[BUF_SIZE + 1];

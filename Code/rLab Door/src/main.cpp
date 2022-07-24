@@ -2,16 +2,20 @@
 #include <HardwareSerial.h>
 #include <WiFi.h>
 
+#include <conf.h>
 #include <features.h>
 #include <console_ui.h>
-#include <log_manager.h>
-#include <notify.h>
 #include <Preferences.h>
+#include <pi_control.h>
+#include <monitor.h>
+
 
 /* Global variables */
 TaskHandle_t consoleTaskHandle = NULL;
+TaskHandle_t monitorTaskHandle = NULL;
 Pushover pushover;
 Preferences prefs;
+
 
 /* Additional Serial Ports 
  * See https://quadmeup.com/arduino-esp32-and-3-hardware-serial-ports/?utm_source=pocket_mylist
@@ -51,6 +55,26 @@ void setup () {
   /* Configure GPIOs */
   setup_gpio();
 
+  /* Check the Raspberry Pi */
+  Pi rpi;
+  rpi.begin(
+    GPIO_PI_POWERED,
+    GPIO_PI_HEARTBEAT,
+    GPIO_PI_OPEN_CMD_1,
+    GPIO_PI_OPEN_CMD_2
+  );
+  delay(1000);  // give the ISR chance to fire
+  if(rpi.is_connected()) {
+    log_i("Detected Raspberry Pi");
+  } else {
+    log_w("No Raspberry Pi detected");
+  }
+  if(rpi.is_alive()) {
+    log_i("Detected Pi Heartbeat - service running");
+  } else {
+    log_w("No Heartbeat detected from the Pi - check if service is running");
+  }
+
   /* Configure I2C for Character Display */
   setup_i2c_disp();
 
@@ -64,6 +88,7 @@ void setup () {
 
   /* Start the FreeRTOS tasks */
   xTaskCreate(consoleTask, "Console Task", 10000, (void*) &Serial, 8, &consoleTaskHandle);
+  xTaskCreate(monitorTask, "Monitor Task", 5000, NULL, 16, &monitorTaskHandle);
 }
 
 void loop() {
