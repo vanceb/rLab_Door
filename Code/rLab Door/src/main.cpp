@@ -44,14 +44,6 @@ void setup () {
    */
   start_wifi();
 
-  /* Setup notification and logging */
-  //Notify * notify = new Notify();
-  //Notify_Console * console = new Notify_Console(NOTIFY_INFO, &Serial);
-  //notify->add(console);
-  //Notify_Log * log = new Notify_Log(NOTIFY_INFO);
-  //notify->add(log);
-  //notify->info("Logging started!");
-
   /* Configure GPIOs */
   setup_gpio();
 

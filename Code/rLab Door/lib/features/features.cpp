@@ -1,7 +1,13 @@
 #include <Preferences.h>
 #include <WiFi.h>
 #include <Wire.h>
+
+/* Choose display type */
+#ifdef DISP_SSD1306
 #include <Adafruit_SSD1306.h>
+#else
+#include <LiquidCrystal_I2C.h>
+#endif
 
 #include <features.h>
 #include <conf.h>
@@ -17,7 +23,11 @@ char wifi_ssid[WIFI_SSID_MAX_LEN] = {0};
 char wifi_passwd[WIFI_PASSWD_MAX_LEN] = {0};
 
 
+#ifdef DISP_SSD1306
 Adafruit_SSD1306 display;
+#else
+LiquidCrystal_I2C display = LiquidCrystal_I2C(DISP_ADDR, DISP_COLS, DISP_ROWS);
+#endif
 
 void load_prefs()
 {
@@ -187,6 +197,11 @@ int setup_i2c_disp() {
                 return false;
             }
 */
+            display.init();
+            display.backlight();
+            display.setCursor(0,0);
+            display.print("rLab Door Controller");
+
             return true;
         } else {
             log_w("Character display NOT found at i2c 0x%02X", DISP_ADDR);

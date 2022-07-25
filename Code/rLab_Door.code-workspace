@@ -8,5 +8,15 @@
 			"path": "rLab Door"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"files.associations": {
+			"*.tcc": "cpp",
+			"fstream": "cpp",
+			"istream": "cpp",
+			"ostream": "cpp",
+			"sstream": "cpp",
+			"unordered_map": "cpp",
+			"numeric": "cpp"
+		}
+	}
 }

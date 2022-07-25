@@ -94,21 +94,21 @@ uint8_t check_voltages() {
     float v;
     uint8_t errors = 0;
     v = (float) analogRead(GPIO_ADC_V3) / V3_FACTOR;    // Don't really know why I am checking this - CPU would be down!
-    log_d("V3:    %02f", v);
+    log_d("V3:    %02fV", v);
     if (v < V3_LOW) {
         errors |= ERR_V3_LOW;
     } else if (v > V3_HI) {
         errors |= ERR_V3_HI;
     }
     v = (float) analogRead(GPIO_ADC_V5) / V5_FACTOR;
-    log_d("V5:    %02f", v);
+    log_d("V5:    %02fV", v);
     if (v < V5_LOW) {
         errors |= ERR_V5_LOW;
     } else if (v > V5_HI) {
         errors |= ERR_V5_HI;
     }
     v = (float) analogRead(GPIO_ADC_VBATT) / VBATT_FACTOR;
-    log_d("VBATT: %02f", v);
+    log_d("VBATT: %02fV", v);
     if (v < VBATT_LOW) {
         errors |= ERR_VBATT_LOW;
     } else if (v > VBATT_HI) {
@@ -144,6 +144,7 @@ void monitorTask(void * pvParameters) {
 
         /* Run once per second */
         if (loop_counter % LOOP_FREQ == 0) {
+            /* Check the system voltages */
             errors = check_voltages();
             if(errors) {
                 /* One of the voltages is out of limits */
@@ -164,6 +165,8 @@ void monitorTask(void * pvParameters) {
                     battery_low = false;
                 } 
             }
+
+
         }
 
         /* Run once per hour */
