@@ -6,8 +6,8 @@
 
 /* Voltage Measurement */
 /* Conversion factors */
-#define VIN_FACTOR          (70)
-#define VBATT_FACTOR        (102)
+#define VIN_FACTOR          (75)
+#define VBATT_FACTOR        (108)
 #define V5_FACTOR           (359)
 #define V3_FACTOR           (553)
 /* Voltage limits */

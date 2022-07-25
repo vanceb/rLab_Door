@@ -52,6 +52,10 @@
 #define SSD_ROWS            64
 #define SSD_COLS            128
 
+/* Neopixels */
+#define NPX_NUM_LEDS_1      6
+#define NPX_NUM_LEDS_2      0
+
 /* Max variable string lengths */
 /* Wifi */
 #define WIFI_SSID_MAX_LEN   16
@@ -89,6 +93,5 @@ extern uint32_t status;
  */
 extern char wifi_ssid  [WIFI_SSID_MAX_LEN];
 extern char wifi_passwd[WIFI_PASSWD_MAX_LEN];
-
 
 #endif

@@ -1,11 +1,12 @@
 #include <Arduino.h>
 #include <HardwareSerial.h>
 #include <WiFi.h>
+#include <FastLED.h>
+#include <Preferences.h>
 
 #include <conf.h>
 #include <features.h>
 #include <console_ui.h>
-#include <Preferences.h>
 #include <pi_control.h>
 #include <monitor.h>
 

@@ -1,8 +1,13 @@
 #include <Arduino.h>
+#include <FastLED.h>
+#include <LiquidCrystal_I2C.h>
+#include "uptime.h"
+
 #include <monitor.h>
 #include <pi_control.h>
 #include <rfid.h>
 #include <conf.h>
+#include <features.h>
 
 /* Global state variables */
 static bool open1_state = true;
@@ -11,6 +16,57 @@ static unsigned long open1_changed = 0;
 static unsigned long open2_changed = 0;
 static bool input_power_lost = false;
 static bool battery_low = false;
+static bool tamper = false;
+
+/* Display */
+LiquidCrystal_I2C display = LiquidCrystal_I2C(DISP_ADDR, DISP_COLS, DISP_ROWS);
+
+int setup_i2c_disp() {
+    if (enabled & FEATURE_DISP) {   
+        Wire.begin(GPIO_SDA_DISP, GPIO_SCL_DISP);
+        /* Check to see that we have a display */
+        Wire.beginTransmission(DISP_ADDR);
+        if (Wire.endTransmission() == 0) {
+            log_i("Character display found at i2c 0x%02X", DISP_ADDR);
+/*
+            if(display.begin(SSD1306_SWITCHCAPVCC, SSD_ADDR)) {
+                display.display(); // Adafruit welcome screen
+            } else {
+                log_e("Unable to initialise OLED display");
+                return false;
+            }
+*/
+            display.init();
+            display.backlight();
+            display.setCursor(0,0);
+            display.print("rLab Door Controller");
+
+            return true;
+        } else {
+            log_w("Character display NOT found at i2c 0x%02X", DISP_ADDR);
+            log_i("Scanning...");
+            int error;
+            int found = 0;
+            for (int address = 1; address < 127; address++ )
+            {
+                // The i2c_scanner uses the return value of
+                // the Write.endTransmisstion to see if
+                // a device did acknowledge to the address.
+                Wire.beginTransmission(address);
+                error = Wire.endTransmission();
+
+                if (error == 0) {
+                    log_i("I2C device found at address 0x%02X", address);
+                    found++;
+                } else if (error == 4) {
+                    log_w("Unknown error at address 0x%02X", address);
+                }
+            }
+            log_i("Found %d devices on the I2C bus", found);
+        }
+    }
+    return false;
+}
 
 /* check_door_state()
  * 
@@ -91,31 +147,36 @@ void check_door_state() {
  * Uses the ADC to check the various system rails.
  */
 uint8_t check_voltages() {
+    uint16_t v_adc;
     float v;
     uint8_t errors = 0;
-    v = (float) analogRead(GPIO_ADC_V3) / V3_FACTOR;    // Don't really know why I am checking this - CPU would be down!
-    log_d("V3:    %02fV", v);
+    v_adc = analogRead(GPIO_ADC_V3);
+    v = (float) v_adc / V3_FACTOR;
+    log_d("V3:    %0.1fV [%d]", v, v_adc);
     if (v < V3_LOW) {
         errors |= ERR_V3_LOW;
     } else if (v > V3_HI) {
         errors |= ERR_V3_HI;
     }
-    v = (float) analogRead(GPIO_ADC_V5) / V5_FACTOR;
-    log_d("V5:    %02fV", v);
+    v_adc = analogRead(GPIO_ADC_V5);
+    v = (float) v_adc / V5_FACTOR;
+    log_d("V5:    %0.1fV [%d]", v, v_adc);
     if (v < V5_LOW) {
         errors |= ERR_V5_LOW;
     } else if (v > V5_HI) {
         errors |= ERR_V5_HI;
     }
-    v = (float) analogRead(GPIO_ADC_VBATT) / VBATT_FACTOR;
-    log_d("VBATT: %02fV", v);
+    v_adc = analogRead(GPIO_ADC_VBATT);
+    v = ((float) v_adc / VBATT_FACTOR) + 0.5;  // 0.5 accounts for voltage drop across diode
+    log_d("VBATT: %0.1fV [%d]", v, v_adc);
     if (v < VBATT_LOW) {
         errors |= ERR_VBATT_LOW;
     } else if (v > VBATT_HI) {
         errors |= ERR_VBATT_HI;
     }
-    v = (float) analogRead(GPIO_ADC_VIN) / VIN_FACTOR;
-    log_d("VIN:   %02fV", v);
+    v_adc = analogRead(GPIO_ADC_VIN);
+    v = ((float) v_adc / VIN_FACTOR) + 0.5;  // 0.5 accounts for voltage drop across diode
+    log_d("VIN:   %0.1fV [%d]", v, v_adc);
     if (v < VIN_LOW) {
         errors |= ERR_VIN_LOW;
     } else if (v > VIN_HI) {
@@ -131,6 +192,16 @@ void monitorTask(void * pvParameters) {
     long delay_for;
     uint8_t errors;
 
+    /* Configure I2C Character Display */
+    setup_i2c_disp();
+
+    /* Configure Neopixels */
+    CRGB npx1[NPX_NUM_LEDS_1];
+    CRGB npx2[NPX_NUM_LEDS_2];
+    FastLED.addLeds<NEOPIXEL, GPIO_NPX_1>(npx1, NPX_NUM_LEDS_1);
+    FastLED.addLeds<NEOPIXEL, GPIO_NPX_2>(npx2, NPX_NUM_LEDS_2);
+    FastLED.clear(true);
+
     /* Main loop */
     for(;;) {
         /* Run every loop */
@@ -139,7 +210,27 @@ void monitorTask(void * pvParameters) {
 
         /* Run every 10 loops */
         if (loop_counter % 10 == 0) {
+            /* Check the Tamper input */
+            if (digitalRead(GPIO_TAMPER)) {
+                if (!tamper) {
+                    /* This has just happened */
+                    tamper = true;
+                    log_w("TAMPER - The enclosure is open!");
+                } 
+            } else {
+                if (tamper) {
+                    tamper = false;
+                    log_i("TAMPER - The enclosure is closed");
+                }
+            }
 
+            // Neopixels: a colored dot sweeping back and forth, with fading trails
+            /*
+            fadeToBlackBy( npx1, NPX_NUM_LEDS_1, 128);
+            int pos = beatsin16( 13, 0, NPX_NUM_LEDS_1 -1 );
+            npx1[pos] += CRGB::White;
+            FastLED.show();
+            */
         }
 
         /* Run once per second */
@@ -152,10 +243,16 @@ void monitorTask(void * pvParameters) {
                 if ((errors & ERR_VIN_LOW) && !input_power_lost) {
                     input_power_lost = true;
                     log_e("Input power lost or low");
+                    /* Display Power message */
+                    display.setCursor(0,1);
+                    display.print("Power Off - Batt OK ");
                 }
                 if ((errors & ERR_VBATT_LOW) && !battery_low) {
                     battery_low = true;
                     log_w("Battery voltage is low, door may go offline shortly...");
+                    /* Display Power message */
+                    display.setCursor(0,1);
+                    display.print("Power Off - Batt Low");
                 }
             } else {
                 /* No errors, so clear the flags */
@@ -164,9 +261,21 @@ void monitorTask(void * pvParameters) {
                     input_power_lost = false;
                     battery_low = false;
                 } 
+                
+                /* Display Power OK message */
+                display.setCursor(0,1);
+                display.print("      Power OK      ");
             }
 
-
+            /* Show uptime */
+            display.setCursor(0,3);
+            uptime::calculateUptime();
+            display.printf("Up: %03lud %02luh %02lum %02lus",
+                            uptime::getDays(),
+                            uptime::getHours(),
+                            uptime::getMinutes(),
+                            uptime::getSeconds()
+            );
         }
 
         /* Run once per hour */
