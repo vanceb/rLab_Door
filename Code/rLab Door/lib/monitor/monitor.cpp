@@ -218,10 +218,21 @@ void monitorTask(void * pvParameters) {
             }
 
             /* Neopixels */
+            int i = 0;
+            uint8_t brightness = 255;
             npx1.clear();
-            for (int i=0; i< NPX_NUM_LEDS_1; i++) {
-                npx1.setPixelColor(i, npx1.Color(255,255,255));
+            if (pi_open1 || pi_open2) {
+                for (i=0; i<NPX_NUM_LEDS_1; i++) {
+                    npx1.setPixelColor(i, npx1.Color(0,255,0));
+                }
+            } else {
+                brightness = loop_counter % 255;
+                brightness = brightness > 128 ? 256 - brightness : brightness;
+                for (i=0; i<NPX_NUM_LEDS_1; i++) {
+                    npx1.setPixelColor(i, npx1.Color(255,255,255));
+                }
             }
+            npx1.setBrightness(brightness);
             npx1.show();
             
         }
