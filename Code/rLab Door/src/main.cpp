@@ -14,6 +14,15 @@
 /* Global variables */
 TaskHandle_t consoleTaskHandle = NULL;
 TaskHandle_t monitorTaskHandle = NULL;
+TaskHandle_t pushoverTaskHandle = NULL;
+/* Stack high water marks - checked in loop() */
+UBaseType_t console_hwm;
+UBaseType_t prev_console_hwm = 0;
+UBaseType_t monitor_hwm;
+UBaseType_t prev_monitor_hwm = 0;
+UBaseType_t pushover_hwm;
+UBaseType_t prev_pushover_hwm = 0;
+
 Pushover pushover;
 Preferences prefs;
 
@@ -24,9 +33,6 @@ Preferences prefs;
 
 HardwareSerial Pi_Serial(1);
 HardwareSerial NFC_Serial(2);
-
-UBaseType_t console_hwm;
-UBaseType_t prev_console_hwm = 0;
 
 void setup () {
   /* Configure UARTs */
@@ -68,9 +74,6 @@ void setup () {
     log_w("No Heartbeat detected from the Pi - check if service is running");
   }
 
-  /* Configure I2C for Character Display */
-  setup_i2c_disp();
-
   /* Install log manager */
   // Doesn't work under Arduino framework!
   // Log level set in platformio.ini build_flags
@@ -78,10 +81,19 @@ void setup () {
   //esp_log_level_set("*", ESP_LOG_INFO);
 
   pushover.send("rLab Door Booting", "The rLabDoor controller is booting up", -1);
+  
+  QueueHandle_t po_queue = pushover.getQueue();
+  Message msg;
+  strlcpy(msg.title, "Test from rLabDoor", PUSHOVER_MAX_TITLE_LEN);
+  strlcpy(msg.body, "This is the body", PUSHOVER_MAX_MESSAGE_LEN);
+  msg.priority = -1;
+  xQueueSendToBack(po_queue, &msg, 1);
+
 
   /* Start the FreeRTOS tasks */
   xTaskCreate(consoleTask, "Console Task", 10000, (void*) &Serial, 8, &consoleTaskHandle);
   xTaskCreate(monitorTask, "Monitor Task", 5000, NULL, 16, &monitorTaskHandle);
+  xTaskCreate(pushoverTask, "Pushover Task", 8000, (void*) &pushover, 8, &pushoverTaskHandle);
 }
 
 void loop() {
@@ -91,4 +103,17 @@ void loop() {
     prev_console_hwm = console_hwm;
     log_i("Console Stack: %d bytes remaining", console_hwm);
   }
+  
+  monitor_hwm = uxTaskGetStackHighWaterMark(monitorTaskHandle);
+  if (monitor_hwm != prev_monitor_hwm) {
+    prev_monitor_hwm = monitor_hwm;
+    log_i("Monitor Stack: %d bytes remaining", monitor_hwm);
+  }
+
+  pushover_hwm = uxTaskGetStackHighWaterMark(pushoverTaskHandle);
+  if (pushover_hwm != prev_pushover_hwm) {
+    prev_pushover_hwm = pushover_hwm;
+    log_i("Pushover Stack: %d bytes remaining", pushover_hwm);
+  }
+
 }

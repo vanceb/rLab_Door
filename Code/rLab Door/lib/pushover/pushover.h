@@ -5,16 +5,18 @@
 
 /* Pushover (https://pushover.net) */
 /* Pushover API url */
-#define PUSHOVER_DEFAULT_URL                 "https://api.pushover.net/1/messages.json"
-#define PUSHOVER_URL_MAX_LEN         64
-#define PUSHOVER_USER_KEY_MAX_LEN    32
-#define PUSHOVER_API_KEY_MAX_LEN     32
-#define PUSHOVER_MAX_PAYLOAD_LEN     512
+#define PUSHOVER_DEFAULT_URL        "https://api.pushover.net/1/messages.json"
+#define PUSHOVER_URL_MAX_LEN        64
+#define PUSHOVER_USER_KEY_MAX_LEN   32
+#define PUSHOVER_API_KEY_MAX_LEN    32
+#define PUSHOVER_MAX_PAYLOAD_LEN    512
+#define PUSHOVER_MAX_TITLE_LEN      64
+#define PUSHOVER_MAX_MESSAGE_LEN    384
+#define PUSHOVER_MESSAGE_QUEUE_LEN  3  //Should be at least the number of tasks that want to use it
 
-#define PREFS_PO_NAMESPACE  "pushover"
-#define PREFS_PO_URL        "po_url"
-#define PREFS_PO_USER_KEY   "po_user_key"
-#define PREFS_PO_API_KEY    "po_api_key"
+#define PREFS_PO_URL                "po_url"
+#define PREFS_PO_USER_KEY           "po_user_key"
+#define PREFS_PO_API_KEY            "po_api_key"
 
 /* CA Certificate used by Pushover */
 #define DIGICERT_ROOT_CA "-----BEGIN CERTIFICATE-----\n" \
@@ -49,10 +51,18 @@
 "yWQlk9VDV296EI/kQOJNLVEkJ54P\n" \
 "-----END CERTIFICATE-----\n"
 
+/* Message Structure */
+typedef struct Message {
+    char title[PUSHOVER_MAX_TITLE_LEN];
+    char body[PUSHOVER_MAX_MESSAGE_LEN];
+    int  priority;
+} Message;
+
 class Pushover
 {
 private:
     bool configured;
+    QueueHandle_t msg_queue;
 public:
     Pushover(/* args */);
     ~Pushover();
@@ -60,7 +70,11 @@ public:
     int configure(const char* user_key, const char* api_key, const char* url);
     bool is_configured();
     int send(const char * title, const char * msg, int priority);
+    int send(Message * msg);
+    QueueHandle_t getQueue();
 };
 
+/* Task to send queued messages */
+void pushoverTask( void * pvParameters);
 
 #endif

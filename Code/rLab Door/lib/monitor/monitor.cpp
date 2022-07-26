@@ -28,18 +28,8 @@ int setup_i2c_disp() {
         Wire.beginTransmission(DISP_ADDR);
         if (Wire.endTransmission() == 0) {
             log_i("Character display found at i2c 0x%02X", DISP_ADDR);
-/*
-            if(display.begin(SSD1306_SWITCHCAPVCC, SSD_ADDR)) {
-                display.display(); // Adafruit welcome screen
-            } else {
-                log_e("Unable to initialise OLED display");
-                return false;
-            }
-*/
             display.init();
             display.backlight();
-            display.setCursor(0,0);
-            display.print("rLab Door Controller");
 
             return true;
         } else {
@@ -194,13 +184,17 @@ void monitorTask(void * pvParameters) {
 
     /* Configure I2C Character Display */
     setup_i2c_disp();
+    display.setCursor(0,0);
+    display.print("rLab Door Controller");
 
     /* Configure Neopixels */
+    /*
     CRGB npx1[NPX_NUM_LEDS_1];
     CRGB npx2[NPX_NUM_LEDS_2];
     FastLED.addLeds<NEOPIXEL, GPIO_NPX_1>(npx1, NPX_NUM_LEDS_1);
     FastLED.addLeds<NEOPIXEL, GPIO_NPX_2>(npx2, NPX_NUM_LEDS_2);
     FastLED.clear(true);
+    */
 
     /* Main loop */
     for(;;) {
@@ -224,17 +218,20 @@ void monitorTask(void * pvParameters) {
                 }
             }
 
-            // Neopixels: a colored dot sweeping back and forth, with fading trails
+            /* Neopixels */
             /*
             fadeToBlackBy( npx1, NPX_NUM_LEDS_1, 128);
-            int pos = beatsin16( 13, 0, NPX_NUM_LEDS_1 -1 );
-            npx1[pos] += CRGB::White;
+            npx1[(loop_counter / LOOP_FREQ) % NPX_NUM_LEDS_1] = CRGB::White;
             FastLED.show();
             */
         }
 
         /* Run once per second */
         if (loop_counter % LOOP_FREQ == 0) {
+            /* Display */
+            display.setCursor(0,0);
+            display.print("rLab Door Controller");
+
             /* Check the system voltages */
             errors = check_voltages();
             if(errors) {

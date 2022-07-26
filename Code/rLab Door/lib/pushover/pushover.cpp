@@ -1,5 +1,5 @@
+#include <conf.h>
 #include <pushover.h>
-#include <features.h>
 
 #include <Preferences.h>
 #include <WiFi.h>
@@ -12,10 +12,12 @@ char po_api_url [PUSHOVER_URL_MAX_LEN] = {0};
 Pushover::Pushover()
 {
     configured = false;
+    msg_queue = NULL;
 }
 
 Pushover::~Pushover()
 {
+
 }
 
 int Pushover::configure(const char * user_key, const char * api_key, const char * url) { 
@@ -23,6 +25,7 @@ int Pushover::configure(const char * user_key, const char * api_key, const char 
     memset(po_api_key,  0, PUSHOVER_API_KEY_MAX_LEN);
     memset(po_api_url,  0, PUSHOVER_URL_MAX_LEN);
     
+    msg_queue = xQueueCreate(PUSHOVER_MESSAGE_QUEUE_LEN, sizeof(Message));
 
     /* Store supplied credentials into flash */
     if (strlen(user_key) > 0 && strlen(api_key) > 0) {
@@ -115,4 +118,36 @@ int Pushover::send(const char * title, const char * msg, int priority) {
     }
     log_w("Attempt to send message to pushover, but it has not been configured");
     return -1;
+}
+
+int Pushover::send(Message * msg) {
+    return send(msg->title, msg->body, msg->priority);
+}
+
+QueueHandle_t Pushover::getQueue() {
+    return msg_queue;
+}
+
+
+void pushoverTask( void * pvParameters) {
+
+    /* Cast the incoming parameter to a Pushover object */
+    Pushover * po;
+    po = (Pushover*) pvParameters;
+    /* Then get its queue */
+    QueueHandle_t queue;
+    queue = po->getQueue();
+    Message msg;
+
+    for (;;) {
+        /* Check queue for message */
+        if (xQueueReceive(queue, (void*) &msg, 0)) {
+            log_d("Pushover sender got msg: %s", msg.title);
+            po->send(&msg);
+        }
+        delay(100);
+    }
+
+
+
 }

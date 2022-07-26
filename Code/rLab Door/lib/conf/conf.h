@@ -2,6 +2,9 @@
 #define PROJ_CONFIG_H
 
 #include <Arduino.h>
+#include <Preferences.h>
+
+#include <pushover.h>
 
 /* GPIO config */
 
@@ -93,5 +96,8 @@ extern uint32_t status;
  */
 extern char wifi_ssid  [WIFI_SSID_MAX_LEN];
 extern char wifi_passwd[WIFI_PASSWD_MAX_LEN];
+
+extern Pushover pushover;
+extern Preferences prefs;
 
 #endif
