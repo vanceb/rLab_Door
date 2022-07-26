@@ -1,7 +1,6 @@
 #include <Arduino.h>
 #include <HardwareSerial.h>
 #include <WiFi.h>
-#include <FastLED.h>
 #include <Preferences.h>
 
 #include <conf.h>

@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include <FastLED.h>
+#include <Adafruit_NeoPixel.h>
 #include <LiquidCrystal_I2C.h>
 #include "uptime.h"
 
@@ -181,6 +181,12 @@ void monitorTask(void * pvParameters) {
     unsigned long loop_start = millis();
     long delay_for;
     uint8_t errors;
+    
+    /* Neopixels */
+    Adafruit_NeoPixel npx1(NPX_NUM_LEDS_1, GPIO_NPX_1, NEO_GRB + NEO_KHZ800);
+    Adafruit_NeoPixel npx2(NPX_NUM_LEDS_2, GPIO_NPX_2, NEO_GRB + NEO_KHZ800);
+    npx1.begin();
+    npx2.begin();
 
     /* Configure I2C Character Display */
     setup_i2c_disp();
@@ -188,13 +194,6 @@ void monitorTask(void * pvParameters) {
     display.print("rLab Door Controller");
 
     /* Configure Neopixels */
-    /*
-    CRGB npx1[NPX_NUM_LEDS_1];
-    CRGB npx2[NPX_NUM_LEDS_2];
-    FastLED.addLeds<NEOPIXEL, GPIO_NPX_1>(npx1, NPX_NUM_LEDS_1);
-    FastLED.addLeds<NEOPIXEL, GPIO_NPX_2>(npx2, NPX_NUM_LEDS_2);
-    FastLED.clear(true);
-    */
 
     /* Main loop */
     for(;;) {
@@ -219,11 +218,12 @@ void monitorTask(void * pvParameters) {
             }
 
             /* Neopixels */
-            /*
-            fadeToBlackBy( npx1, NPX_NUM_LEDS_1, 128);
-            npx1[(loop_counter / LOOP_FREQ) % NPX_NUM_LEDS_1] = CRGB::White;
-            FastLED.show();
-            */
+            npx1.clear();
+            for (int i=0; i< NPX_NUM_LEDS_1; i++) {
+                npx1.setPixelColor(i, npx1.Color(255,255,255));
+            }
+            npx1.show();
+            
         }
 
         /* Run once per second */
