@@ -211,25 +211,12 @@ void monitorTask(void * pvParameters) {
     for(;;) {
         /* Run every loop */
         loop_start = millis();
+
+        /* Door opening */
         check_door_state();
 
-        /* Run every 10 loops */
-        if (loop_counter % 10 == 0) {
-            /* Check the Tamper input */
-            if (digitalRead(GPIO_TAMPER)) {
-                if (!tamper) {
-                    /* This has just happened */
-                    tamper = true;
-                    log_w("TAMPER - The enclosure is open!");
-                } 
-            } else {
-                if (tamper) {
-                    tamper = false;
-                    log_i("TAMPER - The enclosure is closed");
-                }
-            }
-
-            /* Neopixels */
+        /* Neopixels */
+        if (enabled & FEATURE_NPX_1) {
             int i = 0;
             uint8_t brightness = 255;
             npx1.clear();
@@ -246,7 +233,25 @@ void monitorTask(void * pvParameters) {
             }
             npx1.setBrightness(brightness);
             npx1.show();
-            
+        }
+        if (enabled & FEATURE_NPX_2) {
+        }
+
+        /* Run every 10 loops */
+        if (loop_counter % 10 == 0) {
+            /* Check the Tamper input */
+            if (digitalRead(GPIO_TAMPER)) {
+                if (!tamper) {
+                    /* This has just happened */
+                    tamper = true;
+                    log_w("TAMPER - The enclosure is open!");
+                } 
+            } else {
+                if (tamper) {
+                    tamper = false;
+                    log_i("TAMPER - The enclosure is closed");
+                }
+            }
         }
 
         /* Run once per second */
@@ -254,6 +259,13 @@ void monitorTask(void * pvParameters) {
             /* Display */
             display.setCursor(0,0);
             display.print("rLab Door Controller");
+
+            /* Update Door Status on display*/
+            display.setCursor(0,2);
+            display.printf("Door 1: %s 2: %s ",
+                (open1_state ? "open" : "shut"),
+                (open2_state ? "open" : "shut")
+            );
 
             /* Check the system voltages */
             errors = check_voltages();
