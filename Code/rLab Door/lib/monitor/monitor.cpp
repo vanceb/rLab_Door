@@ -1,6 +1,8 @@
 #include <Arduino.h>
 #include <Adafruit_NeoPixel.h>
+#include <Wire.h>
 #include <LiquidCrystal_I2C.h>
+
 #include "uptime.h"
 
 #include <monitor.h>
@@ -30,7 +32,6 @@ int setup_i2c_disp() {
             log_i("Character display found at i2c 0x%02X", DISP_ADDR);
             display.init();
             display.backlight();
-
             return true;
         } else {
             log_w("Character display NOT found at i2c 0x%02X", DISP_ADDR);
@@ -190,6 +191,9 @@ void monitorTask(void * pvParameters) {
 
     /* Configure I2C Character Display */
     setup_i2c_disp();
+
+//    display.init();
+//    display.backlight();
     display.setCursor(0,0);
     display.print("rLab Door Controller");
 

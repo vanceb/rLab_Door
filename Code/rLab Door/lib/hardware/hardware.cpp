@@ -33,7 +33,6 @@ void setup_gpio() {
   pinMode(GPIO_OPEN_2,        OUTPUT);
 }
 
-
 void load_prefs()
 {
     /* Check for hardware features enabled config setting */
