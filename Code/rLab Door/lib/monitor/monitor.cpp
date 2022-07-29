@@ -258,13 +258,17 @@ void monitorTask(void * pvParameters) {
         if (loop_counter % LOOP_FREQ == 0) {
             /* Display */
             display.setCursor(0,0);
-            display.print("rLab Door Controller");
+            if (tamper) {
+                display.print("       TAMPER       ");
+            } else {
+                display.print("rLab Door Controller");
+            }
 
             /* Update Door Status on display*/
             display.setCursor(0,2);
             display.printf("Door 1: %s 2: %s ",
-                (open1_state ? "open" : "shut"),
-                (open2_state ? "open" : "shut")
+                (open1_state ? "open" : "lock"),
+                (open2_state ? "open" : "lock")
             );
 
             /* Check the system voltages */
