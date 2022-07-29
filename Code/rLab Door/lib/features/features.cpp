@@ -2,6 +2,7 @@
 #include <WiFi.h>
 #include <Wire.h>
 
+#include <hardware.h>
 #include <features.h>
 #include <conf.h>
 
@@ -9,8 +10,6 @@
 uint32_t enabled;
 uint32_t configured = 0;
 uint32_t status = 0;
-
-char msg[MAX_MSG_LEN];
 
 char wifi_ssid[WIFI_SSID_MAX_LEN] = {0};
 char wifi_passwd[WIFI_PASSWD_MAX_LEN] = {0};
@@ -50,11 +49,9 @@ void load_prefs()
     }
 }
 
-char *show_features()
+void show_features(HardwareSerial * console) 
 {
-    /* List enabled features */
-    memset(msg, 0, MAX_MSG_LEN); // Clear the response message
-    snprintf(msg, MAX_MSG_LEN, \
+    console -> printf(
         "Wifi:              %s, %s\n"
         "Pi:                %s, %s\n"
         "Character display: %s, %s\n"
@@ -83,7 +80,6 @@ char *show_features()
         (enabled    & FEATURE_PUSHOVER) ? "enabled" : "disabled",
         (configured & FEATURE_PUSHOVER) ? "configured" : "not configured"
     );
-    return msg;
 }
 
 int configure_wifi(char * ssid, char * passwd) {

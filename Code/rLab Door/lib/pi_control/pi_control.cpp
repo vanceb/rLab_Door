@@ -1,5 +1,5 @@
 #include <pi_control.h>
-#include <conf.h>
+#include <hardware.h>
 
 volatile unsigned long pi_heartbeat;
 volatile bool pi_open1 = false;

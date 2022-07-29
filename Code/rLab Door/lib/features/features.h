@@ -6,7 +6,7 @@
 
 /* Functions */
 void load_prefs();
-char * show_features();
+void show_features(HardwareSerial * console);
 int configure_wifi(char * ssid, char * passwd);
 void start_wifi();
 void setup_gpio();

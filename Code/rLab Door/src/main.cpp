@@ -4,6 +4,7 @@
 #include <Preferences.h>
 
 #include <conf.h>
+#include <hardware.h>
 #include <features.h>
 #include <console_ui.h>
 #include <pi_control.h>
@@ -43,7 +44,7 @@ void setup () {
   prefs.begin(PREFS_NS);
   load_prefs();
   //pushover.configure();
-  Serial.println(show_features());
+  show_features(&Serial);
   
   /* Bring up wifi if enabled and configured 
    * Otherwise this does nothing...

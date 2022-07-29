@@ -4,6 +4,7 @@
 #include <console_ui.h>
 #include <conf.h>
 #include <features.h>
+#include <hardware.h>
 
 char rxbuf[BUF_SIZE];
 char cmd[BUF_SIZE + 1];

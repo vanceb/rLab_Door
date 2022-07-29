@@ -7,7 +7,7 @@
 #include <pi_control.h>
 #include <rfid.h>
 #include <conf.h>
-#include <features.h>
+#include <hardware.h>
 
 /* Global state variables */
 static bool open1_state = true;
