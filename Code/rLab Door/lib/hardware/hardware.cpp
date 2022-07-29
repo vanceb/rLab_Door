@@ -1,11 +1,8 @@
-#include <Preferences.h>
-#include <WiFi.h>
-#include <Wire.h>
-
 #include <hardware.h>
-#include <features.h>
 #include <conf.h>
 
+#include <Arduino.h>
+#include <WiFi.h>
 
 uint32_t enabled;
 uint32_t configured = 0;
@@ -13,6 +10,28 @@ uint32_t status = 0;
 
 char wifi_ssid[WIFI_SSID_MAX_LEN] = {0};
 char wifi_passwd[WIFI_PASSWD_MAX_LEN] = {0};
+
+void setup_gpio() {
+  pinMode(GPIO_PI_HEARTBEAT,  INPUT);
+  pinMode(GPIO_PI_POWERED,    INPUT);
+  pinMode(GPIO_PI_OPEN_CMD_1, INPUT);
+  pinMode(GPIO_PI_OPEN_CMD_2, INPUT);
+
+  pinMode(GPIO_TAMPER,        INPUT);
+  pinMode(GPIO_ADC_VIN,       INPUT);
+  pinMode(GPIO_ADC_VBATT,     INPUT);
+  pinMode(GPIO_ADC_V5,        INPUT);
+  pinMode(GPIO_ADC_V3,        INPUT);
+
+  pinMode(GPIO_WGD0,          INPUT);
+  pinMode(GPIO_WGD1,          INPUT);
+  
+  pinMode(GPIO_NPX_1,         OUTPUT);
+  pinMode(GPIO_NPX_2,         OUTPUT);
+
+  pinMode(GPIO_OPEN_1,        OUTPUT);
+  pinMode(GPIO_OPEN_2,        OUTPUT);
+}
 
 
 void load_prefs()
@@ -141,26 +160,4 @@ void start_wifi()
     {
         log_i("Wifi not enabled");
     }
-}
-
-void setup_gpio() {
-  pinMode(GPIO_PI_HEARTBEAT,  INPUT);
-  pinMode(GPIO_PI_POWERED,    INPUT);
-  pinMode(GPIO_PI_OPEN_CMD_1, INPUT);
-  pinMode(GPIO_PI_OPEN_CMD_2, INPUT);
-
-  pinMode(GPIO_TAMPER,        INPUT);
-  pinMode(GPIO_ADC_VIN,       INPUT);
-  pinMode(GPIO_ADC_VBATT,     INPUT);
-  pinMode(GPIO_ADC_V5,        INPUT);
-  pinMode(GPIO_ADC_V3,        INPUT);
-
-  pinMode(GPIO_WGD0,          INPUT);
-  pinMode(GPIO_WGD1,          INPUT);
-  
-  pinMode(GPIO_NPX_1,         OUTPUT);
-  pinMode(GPIO_NPX_2,         OUTPUT);
-
-  pinMode(GPIO_OPEN_1,        OUTPUT);
-  pinMode(GPIO_OPEN_2,        OUTPUT);
 }

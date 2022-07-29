@@ -1,7 +1,7 @@
 #ifndef HARDWARE_H
 #define HARDWARE_H
 
-#include <stdint.h>
+#include <Arduino.h>
 
 /* GPIO config */
 
@@ -70,5 +70,16 @@
 extern uint32_t enabled;
 extern uint32_t configured;
 extern uint32_t status;
+
+/* Max variable string lengths */
+/* Wifi */
+#define WIFI_SSID_MAX_LEN   16
+#define WIFI_PASSWD_MAX_LEN 32
+
+void setup_gpio();
+void load_prefs();
+void show_features(HardwareSerial * console);
+int configure_wifi(char * ssid, char * passwd);
+void start_wifi();
 
 #endif

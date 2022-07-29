@@ -5,7 +5,6 @@
 
 #include <conf.h>
 #include <hardware.h>
-#include <features.h>
 #include <console_ui.h>
 #include <pi_control.h>
 #include <monitor.h>
@@ -91,7 +90,7 @@ void setup () {
 
 
   /* Start the FreeRTOS tasks */
-  xTaskCreate(consoleTask, "Console Task", 10000, (void*) &Serial, 8, &consoleTaskHandle);
+  xTaskCreate(consoleTask, "Console Task", 5000, (void*) &Serial, 8, &consoleTaskHandle);
   xTaskCreate(monitorTask, "Monitor Task", 5000, NULL, 16, &monitorTaskHandle);
   xTaskCreate(pushoverTask, "Pushover Task", 8000, (void*) &pushover, 8, &pushoverTaskHandle);
 }
