@@ -94,6 +94,7 @@ void check_door_state() {
     }
 
     /* Change the state of the door if RFID says so */
+    /*
     if (open1_state != rfid_open1) {
         digitalWrite(GPIO_OPEN_1, rfid_open1);
         open1_state = rfid_open1;
@@ -117,7 +118,8 @@ void check_door_state() {
             log_i("Door 2 closed by RFID");
         }
     }
-
+    */
+   
     /* Check to see whether we should close the door based on timeout */
     if (millis() - open1_changed > DOOR_OPEN_MAX_MS && digitalRead(GPIO_OPEN_1)) {
         digitalWrite(GPIO_OPEN_1, false);

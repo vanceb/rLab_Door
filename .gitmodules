@@ -1,0 +1,3 @@
+[submodule "Code/rLab Door/lib/NDEF"]
+	path = Code/rLab Door/lib/NDEF
+	url = https://github.com/don/NDEF.git

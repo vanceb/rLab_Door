@@ -3,17 +3,24 @@
 #include <WiFi.h>
 #include <Preferences.h>
 
+#include <PN532_HSU.h>
+#include <PN532.h>
+#include <NfcAdapter.h>
+
 #include <conf.h>
 #include <hardware.h>
 #include <console_ui.h>
 #include <pi_control.h>
 #include <monitor.h>
+#include <rfid.h>
 
 
 /* Global variables */
-TaskHandle_t consoleTaskHandle = NULL;
-TaskHandle_t monitorTaskHandle = NULL;
+TaskHandle_t consoleTaskHandle  = NULL;
+TaskHandle_t monitorTaskHandle  = NULL;
 TaskHandle_t pushoverTaskHandle = NULL;
+TaskHandle_t rfidTaskHandle     = NULL;
+
 /* Stack high water marks - checked in loop() */
 UBaseType_t console_hwm;
 UBaseType_t prev_console_hwm = 0;
@@ -21,6 +28,8 @@ UBaseType_t monitor_hwm;
 UBaseType_t prev_monitor_hwm = 0;
 UBaseType_t pushover_hwm;
 UBaseType_t prev_pushover_hwm = 0;
+UBaseType_t rfid_hwm;
+UBaseType_t prev_rfid_hwm = 0;
 
 Pushover pushover;
 Preferences prefs;
@@ -88,11 +97,15 @@ void setup () {
   msg.priority = -1;
   xQueueSendToBack(po_queue, &msg, 1);
 
+  /* Configure RFID */
+//  PN532_HSU pn532_hsu(NFC_Serial);
+//  NfcAdapter nfc = NfcAdapter(pn532_hsu);
 
   /* Start the FreeRTOS tasks */
   xTaskCreate(consoleTask, "Console Task", 5000, (void*) &Serial, 8, &consoleTaskHandle);
   xTaskCreate(monitorTask, "Monitor Task", 5000, NULL, 16, &monitorTaskHandle);
   xTaskCreate(pushoverTask, "Pushover Task", 8000, (void*) &pushover, 8, &pushoverTaskHandle);
+//  xTaskCreate(rfidTask, "RFID Task", 5000, (void*) &nfc, 8, &rfidTaskHandle);
 }
 
 void loop() {
@@ -113,6 +126,12 @@ void loop() {
   if (pushover_hwm != prev_pushover_hwm) {
     prev_pushover_hwm = pushover_hwm;
     log_i("Pushover Stack: %d bytes remaining", pushover_hwm);
+  }
+
+  rfid_hwm = uxTaskGetStackHighWaterMark(rfidTaskHandle);
+  if (rfid_hwm != prev_rfid_hwm) {
+    prev_rfid_hwm = rfid_hwm;
+    log_i("RFID Stack: %d bytes remaining", rfid_hwm);
   }
 
 }
