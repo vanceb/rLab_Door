@@ -98,8 +98,13 @@ void setup () {
   xQueueSendToBack(po_queue, &msg, 1);
 
   /* Configure RFID */
-//  PN532_HSU pn532_hsu(NFC_Serial);
-//  NfcAdapter nfc = NfcAdapter(pn532_hsu);
+  /* Commented out below as nfc.begin() in the rfidTask
+   * interferes with display and Pi 
+   */
+/*
+  PN532_HSU pn532_hsu(NFC_Serial);
+  NfcAdapter nfc = NfcAdapter(pn532_hsu);
+*/
 
   /* Start the FreeRTOS tasks */
   xTaskCreate(consoleTask, "Console Task", 5000, (void*) &Serial, 8, &consoleTaskHandle);
