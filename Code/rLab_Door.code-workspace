@@ -16,7 +16,8 @@
 			"ostream": "cpp",
 			"sstream": "cpp",
 			"unordered_map": "cpp",
-			"numeric": "cpp"
+			"numeric": "cpp",
+			"uart.h": "c"
 		}
 	}
 }

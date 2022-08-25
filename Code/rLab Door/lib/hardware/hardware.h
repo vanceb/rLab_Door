@@ -9,10 +9,10 @@
 /* Serial - Standard pinouts for programming/logging */
 #define GPIO_TXDO_PROG       1
 #define GPIO_RXDI_PROG       3
-/* Serial2 - Raspberry Pi Serial Interface */
+/* Serial1 - Raspberry Pi Serial Interface */
 #define GPIO_TXDO_PI         18
 #define GPIO_RXDI_PI         19
-/* Serial3 - NFC Serial Interface */
+/* Serial2 - NFC Serial Interface */
 #define GPIO_TXDO_NFC        26
 #define GPIO_RXDI_NFC        27
 

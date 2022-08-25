@@ -3,17 +3,15 @@
 #include <WiFi.h>
 #include <Preferences.h>
 
-#include <PN532_HSU.h>
-#include <PN532.h>
-#include <NfcAdapter.h>
-
 #include <conf.h>
 #include <hardware.h>
 #include <console_ui.h>
 #include <pi_control.h>
 #include <monitor.h>
 #include <rfid.h>
-
+extern "C" {
+  #include <pn532.h>
+}
 
 /* Global variables */
 TaskHandle_t consoleTaskHandle  = NULL;
@@ -39,14 +37,14 @@ Preferences prefs;
  * See https://quadmeup.com/arduino-esp32-and-3-hardware-serial-ports/?utm_source=pocket_mylist
  */
 
-HardwareSerial Pi_Serial(1);
-HardwareSerial NFC_Serial(2);
+//HardwareSerial Pi_Serial(1);
+//HardwareSerial NFC_Serial(2);
 
 void setup () {
   /* Configure UARTs */
   Serial.begin    (115200, SERIAL_8N1, GPIO_RXDI_PROG, GPIO_TXDO_PROG);
-  Pi_Serial.begin (115200, SERIAL_8N1, GPIO_RXDI_PI, GPIO_TXDO_PI);
-  NFC_Serial.begin(115200, SERIAL_8N1, GPIO_RXDI_NFC, GPIO_TXDO_NFC);
+//  Pi_Serial.begin (115200, SERIAL_8N1, GPIO_RXDI_PI, GPIO_TXDO_PI);
+//  NFC_Serial.begin(115200, SERIAL_8N1, GPIO_RXDI_NFC, GPIO_TXDO_NFC);
 
   /* Load preferences from flash */
   prefs.begin(PREFS_NS);
@@ -101,16 +99,19 @@ void setup () {
   /* Commented out below as nfc.begin() in the rfidTask
    * interferes with display and Pi 
    */
-/*
-  PN532_HSU pn532_hsu(NFC_Serial);
-  NfcAdapter nfc = NfcAdapter(pn532_hsu);
-*/
 
-  /* Start the FreeRTOS tasks */
+  
+  pn532_t * nfc = pn532_init(Serial1, GPIO_TXDO_NFC, GPIO_RXDI_NFC, 0);
+  if (!nfc) {
+    Serial.println("Failed to setup PN532 NFC Reader");
+  } else {
+    Serial.println("Successfully setup PN532 NFC Reader");
+    xTaskCreate(rfidTask, "RFID Task", 5000, (void*) nfc, 8, &rfidTaskHandle);
+  }
+  
   xTaskCreate(consoleTask, "Console Task", 5000, (void*) &Serial, 8, &consoleTaskHandle);
   xTaskCreate(monitorTask, "Monitor Task", 5000, NULL, 16, &monitorTaskHandle);
   xTaskCreate(pushoverTask, "Pushover Task", 8000, (void*) &pushover, 8, &pushoverTaskHandle);
-//  xTaskCreate(rfidTask, "RFID Task", 5000, (void*) &nfc, 8, &rfidTaskHandle);
 }
 
 void loop() {
