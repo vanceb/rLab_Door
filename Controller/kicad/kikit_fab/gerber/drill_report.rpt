@@ -1,5 +1,5 @@
 Drill report for rLab_Door.kicad_pcb
-Created on Sat Jul  2 16:35:34 2022
+Created on Thu Sep  8 14:06:49 2022
 
 Copper Layer Stackup:
     =============================================================
@@ -12,22 +12,21 @@ Copper Layer Stackup:
 Drill file 'rLab_Door.drl' contains
     plated through holes:
     =============================================================
-    T1  0.400mm  0.0157"  (37 holes)
-    T2  0.762mm  0.0300"  (8 holes)
-    T3  0.800mm  0.0315"  (3 holes)
-    T4  1.000mm  0.0394"  (22 holes)
-    T5  1.100mm  0.0433"  (30 holes)
-    T6  1.200mm  0.0472"  (13 holes)
+    T1  0.400mm  0.0157"  (46 holes)
+    T2  0.500mm  0.0197"  (32 holes)
+    T3  0.700mm  0.0276"  (5 holes)
+    T4  0.762mm  0.0300"  (8 holes)
+    T5  0.800mm  0.0315"  (3 holes)
+    T6  1.000mm  0.0394"  (55 holes)  (with 3 slots)
     T7  1.300mm  0.0512"  (8 holes)
+    T8  3.200mm  0.1260"  (4 holes)
 
-    Total plated holes count 121
+    Total plated holes count 161
 
 
 Not plated through holes are merged with plated holes
     unplated through holes:
     =============================================================
-    T8  1.100mm  0.0433"  (18 holes)
     T9  2.700mm  0.1063"  (4 holes)
-    T10  3.200mm  0.1260"  (4 holes)
 
-    Total unplated holes count 26
+    Total unplated holes count 4
