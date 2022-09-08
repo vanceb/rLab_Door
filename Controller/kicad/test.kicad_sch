@@ -267,7 +267,7 @@
       )
       (symbol "V_BATT_1_1"
         (pin power_in line (at 0 0 90) (length 0) hide
-          (name "+BATT" (effects (font (size 1.27 1.27))))
+          (name "V_BATT" (effects (font (size 1.27 1.27))))
           (number "1" (effects (font (size 1.27 1.27))))
         )
       )
@@ -320,6 +320,58 @@
       (symbol "V_IN_1_1"
         (pin power_in line (at 0 0 90) (length 0) hide
           (name "V_IN" (effects (font (size 1.27 1.27))))
+          (number "1" (effects (font (size 1.27 1.27))))
+        )
+      )
+    )
+    (symbol "V_BATT_1" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+      (property "Reference" "#PWR" (id 0) (at 0 -3.81 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "Value" "V_BATT_1" (id 1) (at 0 3.556 0)
+        (effects (font (size 1.27 1.27)))
+      )
+      (property "Footprint" "" (id 2) (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "Datasheet" "" (id 3) (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "ki_keywords" "power-flag battery" (id 4) (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "ki_description" "Power symbol creates a global label with name \"+BATT\"" (id 5) (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (symbol "V_BATT_1_0_1"
+        (polyline
+          (pts
+            (xy -0.762 1.27)
+            (xy 0 2.54)
+          )
+          (stroke (width 0) (type default) (color 0 0 0 0))
+          (fill (type none))
+        )
+        (polyline
+          (pts
+            (xy 0 0)
+            (xy 0 2.54)
+          )
+          (stroke (width 0) (type default) (color 0 0 0 0))
+          (fill (type none))
+        )
+        (polyline
+          (pts
+            (xy 0 2.54)
+            (xy 0.762 1.27)
+          )
+          (stroke (width 0) (type default) (color 0 0 0 0))
+          (fill (type none))
+        )
+      )
+      (symbol "V_BATT_1_1_1"
+        (pin power_in line (at 0 0 90) (length 0) hide
+          (name "V_BATT" (effects (font (size 1.27 1.27))))
           (number "1" (effects (font (size 1.27 1.27))))
         )
       )
@@ -470,9 +522,7 @@
     )
   )
 
-  (junction (at 81.28 99.06) (diameter 0) (color 0 0 0 0)
-    (uuid 32dee9eb-caca-4a42-86fe-bfe6721b3996)
-  )
+
   (junction (at 39.37 58.42) (diameter 0) (color 0 0 0 0)
     (uuid 45824d22-a094-4391-b42a-12d8b68f0361)
   )
@@ -980,16 +1030,16 @@
     (pin "2" (uuid b41213ef-9bab-4591-99b8-91a34fb0a034))
   )
 
-  (symbol (lib_id "Device:R") (at 81.28 102.87 180) (unit 1)
+  (symbol (lib_id "Device:R") (at 81.28 102.87 0) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 97ef280e-c12d-402f-a9e0-f8e0446768e1)
-    (property "Reference" "R17" (id 0) (at 83.82 102.87 90)
+    (property "Reference" "R17" (id 0) (at 82.55 102.87 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "10k" (id 1) (at 81.28 101.6 90)
+    (property "Value" "10k" (id 1) (at 81.28 104.14 90)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (id 2) (at 83.058 102.87 90)
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (id 2) (at 79.502 102.87 90)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (id 3) (at 81.28 102.87 0)
@@ -1348,7 +1398,7 @@
     (pin "2" (uuid e2be8986-ee1e-4f3c-b1a2-43a22fd0e34b))
   )
 
-  (symbol (lib_id "Power:V_BATT") (at 90.17 50.8 0) (unit 1)
+  (symbol (lib_name "V_BATT_1") (lib_id "Power:V_BATT") (at 90.17 50.8 0) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid fd2fe9c8-fcac-4fc2-8ca3-efbc69e5513a)
     (property "Reference" "#PWR038" (id 0) (at 90.17 54.61 0)
