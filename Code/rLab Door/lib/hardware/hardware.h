@@ -24,8 +24,8 @@
 
 /* Monitoring */
 #define GPIO_TAMPER          15
-#define GPIO_ADC_VIN         35
-#define GPIO_ADC_VBATT       34
+#define GPIO_ADC_VIN         34
+#define GPIO_ADC_VBATT       35
 #define GPIO_ADC_V5          32
 #define GPIO_ADC_V3          33
 
@@ -36,12 +36,12 @@
 #define GPIO_SCL_DISP        22
 
 /* Control */
-#define GPIO_OPEN_1          13
+#define GPIO_OPEN_1          12
 #define GPIO_OPEN_2          2
 
 /* Keypad */
 #define GPIO_WGD0            14
-#define GPIO_WGD1            12
+#define GPIO_WGD1            13
 
 /* I2C Character Display */
 #define DISP_ADDR           0x27

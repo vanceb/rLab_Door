@@ -147,8 +147,9 @@ pn532_t *pn532_init(int8_t uart, int8_t tx, int8_t rx, uint8_t outputs)
          err = gpio_reset_pin(rx);
       if (!err)
          err = uart_set_pin(uart, tx, rx, -1, -1);
-//      if (!err && !uart_is_driver_installed(uart))
-      if (!err)
+// SVB - Did have this next line commented out
+      if (!err && !uart_is_driver_installed(uart))
+//      if (!err)
       {
          ESP_LOGI(TAG, "Installing UART driver %d", uart);
          err = uart_driver_install(uart, RX_BUF, TX_BUF, 0, NULL, 0);

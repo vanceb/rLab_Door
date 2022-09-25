@@ -773,6 +773,11 @@
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
     )
+    (model "${KIPRJMOD}/3d/TS-1187A v2.iges"
+      (offset (xyz 0 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 0))
+    )
   )
 
   (footprint "MountingHole:MountingHole_3.2mm_M3_Pad_Via" (layer "F.Cu")
@@ -2255,6 +2260,11 @@
     (pad "2" smd rect (at -2.9 2) (size 2.8 1) (layers "F.Cu" "F.Paste" "F.Mask")
       (net 32 "BOOT") (pinfunction "2") (pintype "passive") (tstamp bb2bd4ec-276f-4a4c-928a-e823186e3956))
     (model "${KICAD6_3DMODEL_DIR}/Button_Switch_SMD.3dshapes/SW_push_1P1T_NO_CK_KSC7xxJxxx.wrl"
+      (offset (xyz 0 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 0))
+    )
+    (model "${KIPRJMOD}/3d/TS-1187A v2.iges"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -4450,6 +4460,11 @@
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
     )
+    (model "${KIPRJMOD}/3d/TS-1187A v2.iges"
+      (offset (xyz 0 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 0))
+    )
   )
 
   (footprint "Resistor_SMD:R_0603_1608Metric" (layer "F.Cu")
@@ -4630,6 +4645,11 @@
     (pad "2" smd rect (at 2.9 2) (size 2.8 1) (layers "F.Cu" "F.Paste" "F.Mask")
       (net 62 "Net-(R42-Pad1)") (pinfunction "2") (pintype "passive") (tstamp f54d8ff2-8e1b-4ae4-ad57-b850f8a90d86))
     (model "${KICAD6_3DMODEL_DIR}/Button_Switch_SMD.3dshapes/SW_push_1P1T_NO_CK_KSC7xxJxxx.wrl"
+      (offset (xyz 0 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 0))
+    )
+    (model "${KIPRJMOD}/3d/TS-1187A v2.iges"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -4948,6 +4968,11 @@
       )
     )
     (model "${KICAD6_3DMODEL_DIR}/RF_Module.3dshapes/ESP32-WROOM-32.wrl"
+      (offset (xyz 0 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 0))
+    )
+    (model "${KIPRJMOD}/3d/TS-1187A v2.iges"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))

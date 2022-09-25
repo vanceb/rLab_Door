@@ -13,6 +13,7 @@ void consoleTask(void *pvParameters)
     /* Cast the incoming parameter to a serial port */
     HardwareSerial * console;
     console = (HardwareSerial*) pvParameters;
+    console->print("> Initialised Console Task\n");
 
     char c;
     uint16_t length = 0;

@@ -8,10 +8,16 @@
 #include <console_ui.h>
 #include <pi_control.h>
 #include <monitor.h>
+
+/* Uncomment to enable RFID Reader - Not yet working!) */
+//#define RFID_READER
+
+#ifdef RFID_READER
 #include <rfid.h>
 extern "C" {
   #include <pn532.h>
 }
+#endif
 
 /* Global variables */
 TaskHandle_t consoleTaskHandle  = NULL;
@@ -100,15 +106,16 @@ void setup () {
    * interferes with display and Pi 
    */
 
-  
-  pn532_t * nfc = pn532_init(Serial1, GPIO_TXDO_NFC, GPIO_RXDI_NFC, 0);
+#ifdef RFID_READER
+  pn532_t * nfc = pn532_init(Serial2, GPIO_TXDO_NFC, GPIO_RXDI_NFC, 0);
   if (!nfc) {
     Serial.println("Failed to setup PN532 NFC Reader");
   } else {
     Serial.println("Successfully setup PN532 NFC Reader");
     xTaskCreate(rfidTask, "RFID Task", 5000, (void*) nfc, 8, &rfidTaskHandle);
   }
-  
+#endif
+
   xTaskCreate(consoleTask, "Console Task", 5000, (void*) &Serial, 8, &consoleTaskHandle);
   xTaskCreate(monitorTask, "Monitor Task", 5000, NULL, 16, &monitorTaskHandle);
   xTaskCreate(pushoverTask, "Pushover Task", 8000, (void*) &pushover, 8, &pushoverTaskHandle);
