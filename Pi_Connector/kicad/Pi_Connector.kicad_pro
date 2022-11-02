@@ -401,7 +401,7 @@
       "idf": "",
       "netlist": "",
       "specctra_dsn": "",
-      "step": "",
+      "step": "../../../../cad/Pi_Connector.step",
       "vrml": ""
     },
     "page_layout_descr_file": ""
